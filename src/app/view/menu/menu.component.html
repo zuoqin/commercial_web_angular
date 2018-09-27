@@ -1,0 +1,27 @@
+<div class="menu active">
+    <div class="top">
+        <div class="logo">
+            <a [routerLink]="['/search']"><img src="/assets/img/logo.svg"/></a>
+            <span class="menu__text-animation">FinCase</span>
+        </div>
+
+    </div>
+
+    <hr>
+    <nav>
+        <a [routerLink]="['/search']"  routerLinkActive="active">
+            <div class="icon">
+                <svg-icon src="/assets/img/search.svg"></svg-icon>
+            </div>
+            <span class="menu__text-animation">Новый запрос</span>
+            
+        </a>
+        <a [routerLink]="['/history']"  routerLinkActive="active">
+            <div class="icon">
+                <svg-icon src="/assets/img/history.svg"></svg-icon>
+            </div>
+            <span class="menu__text-animation">История запросов</span>
+            
+        </a>
+    </nav>
+</div>

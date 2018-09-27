@@ -1,0 +1,114 @@
+.menu{
+    width: 88px;
+    background: #141E30;
+    box-shadow: 0px 0px 19px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    height: 100%;
+    top: 0;
+    z-index: 1;
+    left: 0;
+    padding: 20px;
+    transition-property: top,bottom,width;
+    transition-duration: .2s,.2s,.35s;
+    transition-timing-function: linear,linear,ease;
+    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
+    
+    &__text-animation{
+        white-space: nowrap;
+        transition: all .3s ease 0s;
+        opacity: 0;
+        transform: translate3d(-25px,0,0);
+    }
+  
+    .top{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-left: 9px;
+        padding-bottom: 17px;
+        .logo{
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            line-height: 20px;
+            color: white;
+            a{
+                display: inline-block;
+                margin-right: 14px;
+                img{
+                    display: block;
+                }
+            }
+        }
+
+
+    }
+    nav{
+        margin-top: 24px;
+        a{
+            height: 50px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            text-transform: uppercase;
+            color: white;
+            letter-spacing: 0.25px;
+            text-decoration: none;
+            cursor: pointer;
+            margin-bottom: 12px;
+            border-radius: 50px;
+            transition: background .3s ease 0s;
+            *{
+                fill: white;
+            }
+            .icon{
+                margin: 0 21px 0 13px;
+                width: 20px;
+                height: 20px;
+            }
+            &:hover{
+                background-color: hsla(0,0%,100%,.1);
+            }
+            &.active{
+                color: #2CA8FF;
+                background: white;
+              
+                box-shadow: 0px 0px 19px rgba(0, 0, 0, 0.15);
+                cursor: default;
+                .icon{
+                    *{
+                        transition: all .3s ease 0s;
+                        fill: #141E30;
+                    }
+                }
+               
+            }
+        }
+       
+    }
+    &:hover{
+        width: 280px;
+        background: #2CA8FF;
+        .menu__text-animation{
+            opacity: 1;
+            transform: translateZ(0);
+        }
+        nav{
+            a{
+                &.active{
+                    .icon{
+                        *{
+                            fill: #2CA8FF;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    hr{
+        border: none;
+        border-top:1px solid #FFFFFF;
+        margin: 0;
+    }
+}
