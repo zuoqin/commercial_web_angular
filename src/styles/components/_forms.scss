@@ -1,0 +1,184 @@
+fieldset{
+    border: none;
+    margin: 0;
+}
+.styled-input{
+    height: 37px;
+    line-height: 17px;
+    border-radius: 19px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    outline: none;
+    color: #141E30;
+    padding: 10px 16px;
+    @extend .transition;
+    &:focus{
+        border-color: #F96332;
+    }
+    &[type='number']{
+        padding-right: 5px;
+    }
+}
+
+.styled-radio{
+    display: block;
+    padding-left: 25px;
+    position: relative;
+    min-height: 19px;
+    cursor: pointer;
+   
+
+    .radiobtn{
+        position: absolute;
+        left: 0;
+        width: 19px;
+        height: 19px;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        border-radius: 100%;
+        &:after{
+            content: "";
+            display: block;
+            width: 7px;
+            height: 7px;
+            background: #141E30;
+            border-radius: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            opacity: 0;
+            @extend .transition;
+        }
+    }
+    input{
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+        &:checked ~ .radiobtn:after{
+            opacity: 1;
+        }
+    }
+}
+.styled-form{
+    &__row{
+        display: flex;
+        margin-bottom: 30px;
+    }
+    label{
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 18px;
+        color: #141E30;
+      
+        
+    }
+    .error-field{
+        position: absolute;
+        top: 100%;
+        color: #e82b2b;
+        padding-left: 17px;
+        padding-top: 3px;
+    }
+    .label{
+        height: 36px;
+        align-items: center;
+        display: flex;
+        justify-content: flex-end;
+        padding-right: 10px;
+    }
+    .left-label{
+        width: 130px;
+        min-width: 130px;
+        text-align: right;
+    }
+    .three-column-row{
+        &__1{
+            min-width: 10.5%;
+        }
+        &__2{
+            min-width: 30.5%;
+        }
+        &__3{
+            min-width: 54%;
+        }
+    }
+    .two-column-row{
+        display: flex;
+        width: 50%;
+        min-width: 50%;
+        .control{
+            display: block;
+        }
+    }
+    .control{
+        width: 100%;
+        display: flex;
+        position: relative;
+        >*{
+            width: 100%;
+        }
+        .styled-input{
+            display: block;
+            width: 100%;
+        }
+        .label{
+            padding-left: 20px;
+        }
+    }
+    .styled-radio{
+        margin-bottom: 12px;
+    }
+}
+.btn{
+    display: inline-block;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 0;
+    padding: 0 22px;
+    outline: none;
+    border: none;
+    color: white;
+    font-weight: 300;
+    &--orange{
+        background: $orange;
+    }
+}
+.ng-select{
+    width: 100%;
+    
+    &.ng-select-opened.ng-select-bottom>.ng-select-container,
+    &.ng-select-focused:not(.ng-selected-opened)>.ng-select-container,
+    .ng-select-container{
+        display: flex !important;
+        @extend .styled-input;
+        box-shadow: none;
+        .ng-value-container{
+            padding-left: 0;
+        }
+    }
+}
+.analog-list{
+    display: flex;
+    background: #888888;
+    width: 100%;
+    border-radius: 36px;
+    overflow: hidden;
+    div{
+        cursor: pointer;
+        @extend .transition;
+        height: 36px;
+        width: 100%;
+        line-height: 36px;
+        color: white;
+        font-weight: 300;
+        text-align: center;
+        padding: 0 10px;
+        white-space: nowrap;
+        &.active,&:hover{
+            background: #b9b9b9;
+        }
+    }
+   
+}

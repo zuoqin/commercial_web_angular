@@ -1,0 +1,7 @@
+<input 
+    ngx-google-places-autocomplete 
+    [options]='optionsGooglePlaces' 
+    #placesRef="ngx-places" 
+    (onAddressChange)="addressSelect($event)" 
+    class="styled-input" 
+    placeholder="Поиск по адресу"/>

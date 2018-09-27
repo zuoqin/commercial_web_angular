@@ -1,20 +1,237 @@
 <h1>НОВЫЙ ЗАПРОС</h1>
 <div class="row">
-    <div class="col col-2">
+    <div class="col col-filter">
         <div class="card">
             <h2>Параметры объекта</h2>
+            <form class="styled-form" [formGroup]="searchForm" novalidate>
+               <div class="styled-form__row">
+                   <label class="left-label label">Адрес</label>
+                   <div class="control">
+                       <autocomplete-places (onSelectAddress)="selectAddress($event)"></autocomplete-places>
+                       <label 
+                            *ngIf="(searchForm.get('lat').hasError('required') && searchForm.get('lat').touched) || (searchForm.get('lon').hasError('required') && searchForm.get('lon').touched)" 
+                            class="error-field">Введите адресс</label>
+                   </div>
+               </div>
+               <div class="styled-form__row">
+                    <label class="left-label label">Площадь (кв.м.)</label>
+                    <div class="control">
+                        <div>
+                        <input 
+                            type="text" 
+                            formControlName="totalsquare" 
+                            [textMask]="numberDecimalSpaceMaskOptions"
+                            class="styled-input three-column-row__1"
+                            />
+                            <label 
+                                *ngIf="searchForm.get('totalsquare').hasError('required') && searchForm.get('totalsquare').touched" 
+                                class="error-field">Введите площадь</label>
+                        </div>
+                       
+                        <div class="control  three-column-row__2">
+                            <label class="label">Этаж</label>
+                            <div>
+                                <input 
+                                    type="text"
+                                    formControlName="storey" 
+                                    [textMask]="numberSpaceMaskOptions"
+                                    class="styled-input"/>
+                                    <label 
+                                        *ngIf="searchForm.get('storey').hasError('required') && searchForm.get('storey').touched" 
+                                        class="error-field">Введите Этаж</label>
+                            </div>
+
+                        
+                        </div>
+                        <div class="control  three-column-row__3">
+                            <label class="label">Тип объекта</label>
+                            <ng-select 
+                                [searchable]="false" 
+                                [clearable]="false"
+                                formControlName="assignment" 
+                                >
+                                <ng-option value="псн">ПСН</ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="styled-form__row">
+                    <label class="left-label label">Состояние отделки</label>
+                    <div class="control">
+                        <ng-select 
+                            class="mw295"
+                            [searchable]="false" 
+                            formControlName="repair" 
+                            
+                            [clearable]="false"
+                            >
+                                <ng-option value="Без отделки">Без отделки</ng-option>
+                                <ng-option value="Косметический">Косметический</ng-option>
+                                <ng-option value="Стандарт">Стандарт</ng-option>
+                                <ng-option value="Люкс">Люкс</ng-option>
+                                <ng-option value="Требует капитального ремонта">Требует капитального ремонта</ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="styled-form__row">
+                    <label class="left-label label">Аналогов</label>
+                    <div class="control">
+                           <div class="analog-list">
+                               <div 
+                                    *ngFor="let analog of analogsCountList" 
+                                    [class.active]="currentAnalogCount==analog"
+                                    (click)="selectAnalog(analog)">
+                                    {{analog}}
+                                </div>
+                           </div>
+                    </div>
+                </div>
+                <div class="styled-form__row">
+                    <div class="two-column-row">
+                        <label class="left-label label align-top">Подход к оценке</label>
+                        <div class="control">
+                            <label class="styled-radio">
+                                <input 
+                                    type="radio"
+                                    formControlName="approach" 
+                                    name="approach" 
+                                    value="0"
+                                    >
+                                Сравнительный
+                                <span class="radiobtn"></span>
+                            </label>
+                            <label class="styled-radio">
+                                <input 
+                                    type="radio" 
+                                    formControlName="approach"
+                                    name="approach" 
+                                    value="1">
+                                Доходный
+                                <span class="radiobtn"></span>
+                            </label>
+                            <label class="styled-radio">
+                                <input 
+                                    type="radio"
+                                    formControlName="approach" 
+                                    name="approach" 
+                                    value="2">
+                                Арендный
+                                <span class="radiobtn"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="two-column-row">
+                        <label class="left-label label align-top">Тип дома</label>
+                        <div class="control">
+                            <label class="styled-radio" >
+                                <input 
+                                    type="radio" 
+                                    formControlName="isbuildingliving"
+                                    name="isbuildingliving" 
+                                    value="true">
+                                Жилой
+                                <span class="radiobtn"></span>
+                            </label>
+                            <label class="styled-radio">
+                                <input 
+                                    type="radio" 
+                                    formControlName="isbuildingliving"
+                                    name="isbuildingliving" 
+                                    value="false">
+                                Нежилой
+                                <span class="radiobtn"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="styled-form__row">
+                    <div class="two-column-row">
+                        <label class="left-label label align-top">Витринные окна</label>
+                        <div class="control">
+                            <label class="styled-radio" >
+                                <input 
+                                    type="radio" 
+                                    formControlName="hasshopwindows" 
+                                    name="hasshopwindows" 
+                                    value="true">
+                                Есть
+                                <span class="radiobtn"></span>
+                            </label>
+                            <label class="styled-radio">
+                                <input 
+                                    type="radio" 
+                                    formControlName="hasshopwindows" 
+                                    name="hasshopwindows" 
+                                    value="false">
+                                Нет
+                                <span class="radiobtn"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="two-column-row">
+                        <label class="left-label label align-top">Линия застройки</label>
+                        <div class="control">
+                            <label class="styled-radio" >
+                                <input 
+                                    type="radio" 
+                                    formControlName="houseline" 
+                                    name="houseline" 
+                                    value="true">
+                                Первая
+                                <span class="radiobtn"></span>
+                            </label>
+                            <label class="styled-radio">
+                                <input 
+                                    type="radio" 
+                                    formControlName="houseline" 
+                                    name="houseline" 
+                                    value="false">
+                                внутриквартальная
+                                <span class="radiobtn"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="styled-form__row">
+                    <div class="two-column-row">
+                        <label class="left-label label align-top">Вход</label>
+                        <div class="control">
+                            <label class="styled-radio" >
+                                <input 
+                                    type="radio" 
+                                    formControlName="isentrance"
+                                    name="isentrance" 
+                                    value="true">
+                                Отдельный
+                                <span class="radiobtn"></span>
+                            </label>
+                            <label class="styled-radio">
+                                <input 
+                                    type="radio" 
+                                    formControlName="isentrance"
+                                    name="isentrance" 
+                                    value="false">
+                                Общий
+                                <span class="radiobtn"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="btn btn--orange" (click)="submit()">Получить стоимость</div>
+            </form>
         </div>
     </div>
-    <div class="col col-2">
-            <div class="card">
+    <div class="col col-map">
+        <div class="card">
 
-                </div>
+        </div>
     </div>
 </div>
-<div class="row">
+<!-- <div class="row">
     <div class="col col-1">
-            <div class="card">
+        <div class="card">
 
-                </div>
+        </div>
     </div>
-</div>
+</div> -->

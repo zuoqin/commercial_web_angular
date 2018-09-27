@@ -38,8 +38,11 @@ h2{
     &-1{
         width: 100%;
     }
-    &-2{
-        width: 50%;
+    &-filter{
+        min-width: 645px;
+    }
+    &-map{
+        width: 100%;
     }
 
 }
