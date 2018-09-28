@@ -1,0 +1,104 @@
+<h2>Стоимость: {{currentObject.data.toFixed(0) | thousandsSpace}} р. (с учетом НДС) </h2>
+<h2> Стоимость за метр: {{currentObject.avrgPricePerMetrCorrection.toFixed(0) | thousandsSpace}} р. (с учетом НДС) </h2>
+<div class="table-settings">
+    <div class="item cursor">
+        <svg-icon src="/assets/img/settings.svg"></svg-icon>
+        Настроить столбцы
+    </div>
+    <div class="item">
+        <label class="styled-checkbox">
+            <input type="checkbox" [checked]="ifShowCoeff"  (change)="toggleShowCoeff()"/>
+            <span class="checkmark"></span>
+            Коэффициенты
+        </label>
+    </div>
+</div>
+<table 
+    class="styled-table"
+    [class.scale-font]="!ifShowCoeff"
+    >
+    <thead>
+        <tr>
+            <ng-container *ngFor="let column of columnsArray">
+                <th *ngIf="!column.icon" [innerHtml]="column.name"></th>
+
+                <th *ngIf="column.icon && ifShowCoeff">
+                    <img src="/assets/img/icons/{{column.icon}}.svg"/>
+                </th>
+            </ng-container>
+        </tr>
+    </thead>
+    <tbody>
+
+            <tr *ngFor="let analog of currentObject.analogs">
+                <td class="text-center align-middle" width="95">
+                    <label class="styled-checkbox styled-checkbox--without-label">
+                        <input type="checkbox" [checked]="analog.active" (change)="changeActiveAnalog(analog)"/>
+                        <span class="checkmark"></span>
+                    </label>
+                </td>
+                <td>
+                    {{analog.address}}
+                </td>
+                <td>
+                    {{ analog.repair ? analog.repair:'Н/Д'}}
+                </td>
+                <td>
+                    {{analog.totalsquare}}
+                </td>
+                <td>
+                    {{analog.price.toFixed(0) | thousandsSpace}}
+                </td>
+                <td>
+                    {{analog.price_per_meter.toFixed(0) | thousandsSpace}} /
+                    {{analog.price_per_meter_correction.toFixed(0) | thousandsSpace}}
+                </td>
+                <ng-container *ngIf="ifShowCoeff">
+                    <td>
+                        {{analog.koeff1}}
+                    </td>
+                    <td>
+                        {{analog.koeff2}}
+                    </td>
+                    <td>
+                        {{analog.koeff3}}
+                    </td>
+                    <td>
+                        {{analog.koeff4}}
+                    </td>
+                    <td>
+                        {{analog.koeff5}}
+                    </td>
+                    <td>
+                        {{analog.koeff6}}
+                    </td>
+                    <td>
+                        {{analog.koeff7}}
+                    </td>
+                    <td>
+                        {{analog.koeff8}}
+                    </td>
+                    <td>
+                        {{analog.koeff9}}
+                    </td>
+                    <td>
+                        {{analog.koeff9}}
+                    </td>
+                    <td>
+                        {{analog.koeff}}
+                    </td>
+                </ng-container>
+            </tr>
+    </tbody>
+</table>
+<div class="coefficient-list" *ngIf="ifShowCoeff">
+    <ng-container *ngFor="let column of columnsArray">
+        <div class="item"  *ngIf="column.icon">
+            <svg-icon src="/assets/img/icons/{{column.icon}}.svg"></svg-icon>
+            {{column.name}}
+        </div>
+    </ng-container>
+    <div class="item item--title">
+            *Корректирующие коэффициенты
+    </div>
+</div>

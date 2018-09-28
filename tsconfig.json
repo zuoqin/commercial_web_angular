@@ -18,6 +18,7 @@
 		],
 		"paths": {
 			"@environments": [ "environments/environment" ],
+			"@services": ["app/core/services"],
 			"@config": ["app/config"],
 			}
 	}

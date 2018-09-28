@@ -58,6 +58,54 @@ fieldset{
         }
     }
 }
+.styled-checkbox{
+    padding-left: 28px;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    min-height: 18px;
+    line-height: 19px;
+    &--without-label{
+        padding-left: 18px;
+    }
+    .checkmark{
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 18px;
+        width: 18px;
+        background: transparent;
+        border: 1px solid #D1D1D1;
+        border-radius: 3px;
+        background: white;
+        &:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 5px;
+            top: 2px;
+            width: 5px;
+            height: 8px;
+            border: solid #141E30;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+    }
+    input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        pointer-events: none;
+        &:checked ~ .checkmark {
+  
+        }
+        &:checked ~ .checkmark:after {
+            display: block;
+        }
+
+
+    }
+}
 .styled-form{
     &__row{
         display: flex;
@@ -79,7 +127,7 @@ fieldset{
         padding-top: 3px;
     }
     .label{
-        height: 36px;
+        height: 37px;
         align-items: center;
         display: flex;
         justify-content: flex-end;
@@ -130,8 +178,8 @@ fieldset{
 }
 .btn{
     display: inline-block;
-    height: 36px;
-    line-height: 36px;
+    height: 37px;
+    line-height: 37px;
     text-align: center;
     border-radius: 6px;
     cursor: pointer;
@@ -158,19 +206,36 @@ fieldset{
             padding-left: 0;
         }
     }
+    .ng-dropdown-panel{
+        &.ng-select-bottom{
+            margin-top: 0;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+        }
+        .ng-dropdown-panel-items{
+            .ng-option{
+                padding: 8px 16px;
+                color: #141E30;
+                &.ng-option-marked,
+                &.ng-option-selected{
+                    background-color: $orange;
+                    color: white
+                }
+            }
+        }
+    }
 }
 .analog-list{
     display: flex;
     background: #888888;
     width: 100%;
-    border-radius: 36px;
+    border-radius: 37px;
     overflow: hidden;
     div{
         cursor: pointer;
         @extend .transition;
-        height: 36px;
+        height: 37px;
         width: 100%;
-        line-height: 36px;
+        line-height: 37px;
         color: white;
         font-weight: 300;
         text-align: center;

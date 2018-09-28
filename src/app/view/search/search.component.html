@@ -79,7 +79,7 @@
                            <div class="analog-list">
                                <div 
                                     *ngFor="let analog of analogsCountList" 
-                                    [class.active]="currentAnalogCount==analog"
+                                    [class.active]="searchForm.controls['analogscount'].value==analog"
                                     (click)="selectAnalog(analog)">
                                     {{analog}}
                                 </div>
@@ -115,7 +115,7 @@
                                     formControlName="approach" 
                                     name="approach" 
                                     value="2">
-                                Арендный
+                                Аренда
                                 <span class="radiobtn"></span>
                             </label>
                         </div>
@@ -218,20 +218,49 @@
                     </div>
 
                 </div>
-                <div class="btn btn--orange" (click)="submit()">Получить стоимость</div>
+                <div class="styled-form__row">
+                        <div class="two-column-row">
+                            <label class="styled-checkbox">
+                                <input type="checkbox" formControlName="includedepr"/>
+                                <span class="checkmark"></span>
+                                Включить аналоги ДЭПР
+                            </label>
+                        </div>
+                        <div class="two-column-row">
+                            <label class="styled-checkbox">
+                                <input type="checkbox" formControlName="includenondepr"/>
+                                <span class="checkmark"></span>
+                                Включить аналоги НЕ ДЭПР
+                            </label>
+                        </div>
+                    </div>
+
+                <div class="btn btn--orange" (click)="submit()">{{btnText.text}}</div>
             </form>
         </div>
     </div>
     <div class="col col-map">
-        <div class="card">
-
+        <div class="card map-block">
+            <h2>Местоположение</h2>
+            <div class="map-block__map">
+                <map #gmap></map>
+            </div>
+          
+            <div class="map-block__bottom" >
+                <div *ngIf="currentPlaceObject">Координаты: {{currentPlaceObject.lat}}, {{currentPlaceObject.lon}}</div>
+                <div *ngIf="currentPlaceObject" class="address">
+                    <label>Адрес</label>
+                    <input type="text" class="styled-input" disabled value="{{currentPlaceObject.address}}"/>
+                </div>
+               
+            </div>
         </div>
     </div>
 </div>
-<!-- <div class="row">
+<div class="row" *ngIf="currentObject">
     <div class="col col-1">
         <div class="card">
-
+            <analogs-list [currentObject]="currentObject" (onChangeActiveAnalogs)="onChangeActiveAnalogs($event)"></analogs-list>
         </div>
     </div>
-</div> -->
+</div>

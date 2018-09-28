@@ -7,17 +7,20 @@ import { HeaderComponent } from './view/header/header.component';
 import { MenuComponent } from './view/menu/menu.component';
 import { HistoryComponent } from './view/history/history.component';
 import { AutocompletePlacesComponent } from './view/autocomplete-places/autocomplete-places.component'
+import { MapComponent } from './view/map/map.component';
+import { AnalogsListComponent } from './view/analogs-list/analogs-list.component'
 /*Moduls */
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { CoreModule } from './core/core.module';
 /*Plugins */
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TextMaskModule } from 'angular2-text-mask';
 import { GooglePlaceModule } from "ngx-google-places-autocomplete";
-
+/*Pipes */
+import { ThousandsSpacePipe } from './pipes/thousands.pipe';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,10 @@ import { GooglePlaceModule } from "ngx-google-places-autocomplete";
     HeaderComponent,
     MenuComponent,
     HistoryComponent,
-    AutocompletePlacesComponent
+    AutocompletePlacesComponent,
+    MapComponent,
+    AnalogsListComponent,
+    ThousandsSpacePipe
   ],
   imports: [
     BrowserModule,
@@ -37,7 +43,8 @@ import { GooglePlaceModule } from "ngx-google-places-autocomplete";
     FormsModule,
     ReactiveFormsModule,
     TextMaskModule,
-    GooglePlaceModule
+    GooglePlaceModule,
+    CoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
