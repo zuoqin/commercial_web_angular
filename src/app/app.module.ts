@@ -8,7 +8,10 @@ import { MenuComponent } from './view/menu/menu.component';
 import { HistoryComponent } from './view/history/history.component';
 import { AutocompletePlacesComponent } from './view/autocomplete-places/autocomplete-places.component'
 import { MapComponent } from './view/map/map.component';
-import { AnalogsListComponent } from './view/analogs-list/analogs-list.component'
+import { AnalogsListComponent } from './view/analogs-list/analogs-list.component';
+import { ColumnsFilterComponent } from './view/columns-filter/columns-filter.component';
+import { GalleryModalComponent } from './view/modals';
+
 /*Moduls */
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -19,6 +22,7 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TextMaskModule } from 'angular2-text-mask';
 import { GooglePlaceModule } from "ngx-google-places-autocomplete";
+import { BsModalModule } from 'ng2-bs3-modal';
 /*Pipes */
 import { ThousandsSpacePipe } from './pipes/thousands.pipe';
 
@@ -32,7 +36,9 @@ import { ThousandsSpacePipe } from './pipes/thousands.pipe';
     AutocompletePlacesComponent,
     MapComponent,
     AnalogsListComponent,
-    ThousandsSpacePipe
+    ThousandsSpacePipe,
+    ColumnsFilterComponent,
+    GalleryModalComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +50,8 @@ import { ThousandsSpacePipe } from './pipes/thousands.pipe';
     ReactiveFormsModule,
     TextMaskModule,
     GooglePlaceModule,
-    CoreModule
+    CoreModule,
+    BsModalModule
   ],
   providers: [],
   bootstrap: [AppComponent]

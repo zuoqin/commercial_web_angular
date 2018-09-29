@@ -1,0 +1,1 @@
+export * from './gallery-modal/gallery-modal.component';

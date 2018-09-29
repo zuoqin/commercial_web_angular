@@ -1,0 +1,36 @@
+<div 
+    
+    [class.active]="columnSelectShow"
+    class="cursor popup-form popup-form--290">
+
+    <div class="text-icon" (click)="showColumnsSelect()">
+            <svg-icon src="/assets/img/settings.svg" class="text-icon__icon"></svg-icon>
+            Настроить столбцы
+    </div>
+
+    <div class="popup-form__container">
+        <label 
+            *ngFor="let item of columnsCopy"
+            class="popup-form__checkbox styled-checkbox">
+            <input 
+                type="checkbox"
+                (change)="item.active=!item.active"
+                [checked]="item.active" 
+                />
+            <span class="checkmark"></span>
+           <span [innerHtml]="item.name"></span>
+        </label>
+        <label class="popup-form__checkbox styled-checkbox">
+            <input 
+                type="checkbox"
+                (change)="selectAllColumns($event,columnsCopy)"
+                />
+            <span class="checkmark"></span>
+            Выделить все
+        </label>
+        <div class="popup-form__bottom-btn">
+            <div class="btn" (click)="closeColumnsSelect()">Сбросить</div>
+            <div class="btn btn--orange" (click)="saveColumnsSelect()">Подтвердить</div>
+        </div>
+    </div>
+</div>

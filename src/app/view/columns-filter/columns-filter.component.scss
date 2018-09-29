@@ -1,0 +1,59 @@
+.popup-form{
+    position: relative;
+    &__container{
+        display: none;
+        margin-top: 16px;
+        position: absolute;
+        z-index: 1;
+        right: 0;
+        top: 100%;
+        border: 1px solid #c2c2c2;
+        background: #ffffff;
+        padding: 5px 18px 0;
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 20px;
+      
+    }
+    &.active &__container{
+        display: block;
+    }
+    &--290{
+        .popup-form__container{
+            width: 290px;
+        }
+    }
+
+
+  
+    &__bottom-btn{
+        display: flex;
+        margin-left: -18px;
+        margin-right: -18px;
+        margin-top: 10px;
+        >*{
+ 
+            width: 50%;
+            text-align: center;
+            border-radius: 0px;
+            border-top:1px solid #979797;
+            letter-spacing: -0.8px;
+            color: #5A5A5A;
+         
+            &:not(:first-child){
+                border-left: 1px solid #979797;
+            }
+        }
+    }
+    &__checkbox{
+        display: block;
+        margin-bottom: 5px;
+    }
+}
+.text-icon{
+    display: inline-flex;
+    align-items: center;
+    &__icon{
+        margin-right: 8px;
+    }
+}

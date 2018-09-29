@@ -12,7 +12,7 @@ body{
     line-height: 18px;
     color: #5A5A5A;
     background: #EBECF1;
-    min-width: 1300px;
+    min-width: 1400px;
 }
 .wrapper{
     padding: 30px 30px;
@@ -29,6 +29,10 @@ h2{
     line-height: 26px;
     color: #5A5A5A;
     margin: 0 0 20px;
+    &.more-margin{
+        margin-top: 16px;
+        letter-spacing: 0.4px;
+    }
 }
 .row{
     display: flex;

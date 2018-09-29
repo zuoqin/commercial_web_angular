@@ -13,8 +13,15 @@ export class SearchService {
     constructor (
         private apiService: ApiService
       ) {}
+
+      public storage: any;
+      
     estimate(body): Observable<any> {
         return this.apiService.post('/estimate',body)
           .pipe(map(data => data));
-      }
+    }
+    getHistiry(): Observable<any> {
+        return this.apiService.get('/history')
+          .pipe(map(data => data));
+    }
 }

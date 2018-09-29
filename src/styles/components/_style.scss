@@ -6,7 +6,7 @@
         padding-bottom: 30px;
     }
     &__bottom{
-        min-height: 70px;
+        min-height: 105px;
         input{
             width: 100%;
             min-height: 37px;
@@ -21,6 +21,14 @@
             label{
                 padding-right: 18px;
             }
+        }
+    }
+    &__filter{
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+        >div{
+            margin: 0 10px;
         }
     }
 }
@@ -49,16 +57,57 @@
     td{
         border: 1px solid rgba(20, 30, 48, 0.23);
         color: #141E30;
-        font-size: 10px;
-        line-height: 14px;
+        font-size: 13px;
+        line-height: 16px;
         padding: 15px 10px 10px;
         vertical-align: top;
+        position: relative;
+        &.address{
+       
+            padding-right: 60px;
+            min-width: 180px;
+            .icons-link{
+                opacity: 0;
+                pointer-events: none;
+                position: absolute;
+                right: 10px;
+                display: flex;
+                align-items: center;
+                top: 10px;
+                @extend .transition;
+                >*{
+                    display: inline-block;
+                    margin-left: 10px;
+                    cursor: pointer;
+                    width: 20px;
+                    height: 20px;
+                    @extend .transition;
+                    &:hover{
+                        opacity: 0.8;
+                    }
+                    svg{
+                        fill:#2B4575;
+                    }
+                    *{
+                     
+                        width: 100%;
+                        max-height: 100%;
+                    }
+                }
+            }
+        }
     }
+    
+
     tr:nth-child(even) td{
         background: #DDE9FF;
     }
     tr:hover td{
         background: #C0D5FC;
+        .icons-link{
+            opacity: 1;
+            pointer-events: all;
+        }
     }
 }
 .scale-font{
@@ -69,7 +118,7 @@
 }
 .coefficient-list{
     font-size:0;
-    margin-top: 28px;
+    margin-top: 34px;
     .item{
         font-size: 14px;
         line-height: 20px;
@@ -79,7 +128,8 @@
         align-items: center;
         width: 16.666%;
         padding-right: 20px;
-        margin-bottom: 23px;
+        margin-bottom: 26px;
+        letter-spacing: 0.5px;
         &--title{
             font-weight: bold;
         }
@@ -95,9 +145,61 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    padding-right: 10px;
+    margin-bottom: 5px;
+    letter-spacing: 0.3px;
     .item{
         display: inline-flex;
         align-items: center;
-        margin-left: 30px;
+        margin-left: 31px;
+    }
+    .styled-checkbox{
+        padding-left: 25px;
+    }
+}
+.analogs-title{
+    display: flex;
+    justify-content: flex-start;
+    h2{
+        font-size: 18px;
+        line-height: 20px;
+        min-width: 33.33%;
+    }
+}
+.detail-list{
+    display: flex;
+    flex-wrap: wrap;
+    color: #141E30;
+    font-weight: 300;
+    margin-top: 31px;
+    padding-left: 47px;
+    &__col{
+        width: 33.333%;
+        &:nth-child(1){
+            width: 40%;
+            padding-right: 7%;
+        }
+        &:nth-child(2){
+            padding-left: 4%;
+            width: 25%;
+        }
+        &:nth-child(3){
+            width: 35%;
+            padding-left: 8%;
+        }
+    }
+    .item{
+   
+       display: flex;
+       margin-bottom: 26px;
+        label{
+            width: 81%;
+            padding-right: 30px;
+        }
+        div{
+            font-weight: bold;
+            white-space: nowrap;
+            min-width: 95px;
+        }
     }
 }

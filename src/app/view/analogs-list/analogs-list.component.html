@@ -1,10 +1,13 @@
-<h2>Стоимость: {{currentObject.data.toFixed(0) | thousandsSpace}} р. (с учетом НДС) </h2>
-<h2> Стоимость за метр: {{currentObject.avrgPricePerMetrCorrection.toFixed(0) | thousandsSpace}} р. (с учетом НДС) </h2>
+<gallery-modal #gallery></gallery-modal>
+<div class="analogs-title">
+    <h2>Стоимость: {{currentObject.data.toFixed(0) | thousandsSpace}} р. (с учетом НДС) </h2>
+    <h2> Стоимость за метр: {{currentObject.avrgPricePerMetrCorrection.toFixed(0) | thousandsSpace}} р. (с учетом НДС) </h2>
+</div>
+
 <div class="table-settings">
-    <div class="item cursor">
-        <svg-icon src="/assets/img/settings.svg"></svg-icon>
-        Настроить столбцы
-    </div>
+
+    <columns-filter (onSelectedColumns)="onSelectedColumns($event)" [columns]="columnsArray"></columns-filter>
+
     <div class="item">
         <label class="styled-checkbox">
             <input type="checkbox" [checked]="ifShowCoeff"  (change)="toggleShowCoeff()"/>
@@ -20,74 +23,85 @@
     <thead>
         <tr>
             <ng-container *ngFor="let column of columnsArray">
-                <th *ngIf="!column.icon" [innerHtml]="column.name"></th>
+                <ng-container *ngIf="column.active">
+                        <th *ngIf="!column.icon" [innerHtml]="column.name"></th>
 
-                <th *ngIf="column.icon && ifShowCoeff">
-                    <img src="/assets/img/icons/{{column.icon}}.svg"/>
-                </th>
+                        <th *ngIf="column.icon">
+                            <img src="/assets/img/icons/{{column.icon}}.svg"/>
+                        </th>
+                </ng-container>
+               
             </ng-container>
         </tr>
     </thead>
     <tbody>
 
             <tr *ngFor="let analog of currentObject.analogs">
-                <td class="text-center align-middle" width="95">
+                <td *ngIf="isColumnActive('1')" class="text-center align-middle" width="95">
                     <label class="styled-checkbox styled-checkbox--without-label">
                         <input type="checkbox" [checked]="analog.active" (change)="changeActiveAnalog(analog)"/>
                         <span class="checkmark"></span>
                     </label>
                 </td>
-                <td>
+                <td *ngIf="isColumnActive('2')" class="address">
                     {{analog.address}}
+                    <div *ngIf="analog.url || analog.screenpath" class="icons-link">
+                        <div  *ngIf="analog.screenpath && analog.screenpath.length>10" (click)="showImage('http://snapshots.eliz.site/'+analog.screenpath)" >
+                            <svg-icon src="/assets/img/image.svg"></svg-icon>
+                        </div>
+                        <a *ngIf="analog.url" target="_blank" href="{{analog.url}}"><svg-icon src="/assets/img/link.svg"></svg-icon></a>  
+                    </div>
+                    
+                  
                 </td>
-                <td>
+                <td  *ngIf="isColumnActive('3')">
                     {{ analog.repair ? analog.repair:'Н/Д'}}
                 </td>
-                <td>
+                <td  *ngIf="isColumnActive('4')">
                     {{analog.totalsquare}}
                 </td>
-                <td>
+                <td  *ngIf="isColumnActive('5')">
                     {{analog.price.toFixed(0) | thousandsSpace}}
                 </td>
-                <td>
+                <td  *ngIf="isColumnActive('6')">
                     {{analog.price_per_meter.toFixed(0) | thousandsSpace}} /
                     {{analog.price_per_meter_correction.toFixed(0) | thousandsSpace}}
                 </td>
-                <ng-container *ngIf="ifShowCoeff">
-                    <td>
-                        {{analog.koeff1}}
-                    </td>
-                    <td>
-                        {{analog.koeff2}}
-                    </td>
-                    <td>
-                        {{analog.koeff3}}
-                    </td>
-                    <td>
-                        {{analog.koeff4}}
-                    </td>
-                    <td>
-                        {{analog.koeff5}}
-                    </td>
-                    <td>
-                        {{analog.koeff6}}
-                    </td>
-                    <td>
-                        {{analog.koeff7}}
-                    </td>
-                    <td>
-                        {{analog.koeff8}}
-                    </td>
-                    <td>
-                        {{analog.koeff9}}
-                    </td>
-                    <td>
-                        {{analog.koeff9}}
-                    </td>
-                    <td>
-                        {{analog.koeff}}
-                    </td>
-                </ng-container>
+         
+                <td  *ngIf="isColumnActive('7')">
+                    {{analog.koeff1}}
+                </td>
+                <td  *ngIf="isColumnActive('8')">
+                    {{analog.koeff2}}
+                </td>
+                <td  *ngIf="isColumnActive('9')">
+                    {{analog.koeff3}}
+                </td>
+                <td  *ngIf="isColumnActive('10')">
+                    {{analog.koeff4}}
+                </td>
+                <td  *ngIf="isColumnActive('11')">
+                    {{analog.koeff5}}
+                </td>
+                <td  *ngIf="isColumnActive('12')">
+                    {{analog.koeff6}}
+                </td>
+                <td  *ngIf="isColumnActive('13')">
+                    {{analog.koeff7}}
+                </td>
+                <td  *ngIf="isColumnActive('14')">
+                    {{analog.koeff8}}
+                </td>
+                <td  *ngIf="isColumnActive('15')">
+                    {{analog.koeff9}}
+                </td>
+                <td  *ngIf="isColumnActive('16')">
+                    {{analog.koeff9}}
+                </td>
+                <td *ngIf="isColumnActive('17')">
+                    {{analog.koeff}}
+                </td>
+        
             </tr>
     </tbody>
 </table>

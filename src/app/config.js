@@ -7,7 +7,7 @@ export const CONFIG = {
                 includeThousandsSeparator: true,
                 thousandsSeparatorSymbol: ' ',
                 allowDecimal: true,
-                decimalSymbol: ',',
+                decimalSymbol: '.',
                 decimalLimit: 2,
                 integerLimit: 4,
                 requireDecimal: false,

@@ -109,7 +109,7 @@ fieldset{
 .styled-form{
     &__row{
         display: flex;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
     }
     label{
         font-weight: 300;
@@ -191,6 +191,11 @@ fieldset{
     font-weight: 300;
     &--orange{
         background: $orange;
+        color: white !important;
+    }
+    transition: all .3s ease 0s;
+    &:hover{
+        opacity: 0.8;
     }
 }
 .ng-select{

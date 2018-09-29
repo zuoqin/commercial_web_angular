@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit,ViewChild,Output,EventEmitter } from '@angular/core';
 import {} from '@types/googlemaps';
 
 @Component({
@@ -12,7 +12,8 @@ export class MapComponent implements OnInit {
     markers: google.maps.Marker[] = [];
     mainMarker: google.maps.Marker[] = [];
     public currentMarker;
-
+    @Output() onInitMap = new EventEmitter<any>();
+   
     ngOnInit(){
         this.initMap(this.gmapElement.nativeElement);
     }
@@ -43,7 +44,8 @@ export class MapComponent implements OnInit {
             ]           
         };
         
-		this.map = new google.maps.Map(element, mapProp);
+        this.map = new google.maps.Map(element, mapProp);
+        this.onInitMap.emit()
     }
     // this.setMarker(this.state.coordinate.latitude, this.state.coordinate.longitude, content);
 
@@ -98,7 +100,12 @@ export class MapComponent implements OnInit {
     }
     addAanalogsMarker(analogs){
         this.removeMarker()
-        let marker;
+        if(!analogs.length){
+            return;
+        }
+
+        let bounds  = new google.maps.LatLngBounds();
+        
         analogs.map(analog=>{
             const coordinate = new google.maps.LatLng(analog.latitude, analog.longitude);
             let color;
@@ -124,15 +131,15 @@ export class MapComponent implements OnInit {
    
             const infowindow = new google.maps.InfoWindow({
                 content: `
-                <div style="margin-top: 5px;">Адрес: ${analog.address}</div>
-                <div style="margin-top: 5px;">Тип ремонта: ${analog.repair}</div>
-                <div style="margin-top: 5px;">Вход: ${analog.entrance}</div>
-                <div style="margin-top: 5px;">Линия застройки: ${analog.houselinetype}</div>
-                <div style="margin-top: 5px;">Площадь: ${analog.totalsquare} м²</div>
+                <div style="margin-top: 5px;">Адрес: ${analog.address ? analog.address:'Н/Д'}</div>
+                <div style="margin-top: 5px;">Тип ремонта: ${analog.repair ? analog.repair:'Н/Д'}</div>
+                <div style="margin-top: 5px;">Вход: ${analog.entrance ? analog.entrance:'Н/Д'}</div>
+                <div style="margin-top: 5px;">Линия застройки: ${analog.houselinetype ? analog.entrance:'Н/Д'}</div>
+                <div style="margin-top: 5px;">Площадь: ${analog.totalsquare ? analog.totalsquare.toLocaleString('ru-RU') :'Н/Д' } м²</div>
                 <div style="margin-top: 5px;">Наличие витринных окон: ${analog.hasshopwindows=='true' ? 'есть':'нет'}</div>
                 <div style="margin-top: 5px;">Тип здания: ${analog.isbuildingliving=='true' ? 'жилой':'нежилой'}</div>
-                <div style="margin-top: 5px;">Этаж: ${analog.floor}</div>
-                <div style="text-align:center;margin-top: 5px;">Цена: ${analog.price} р.</div>
+                <div style="margin-top: 5px;">Этаж: ${analog.floor ? analog.floor:'Н/Д'}</div>
+                <div style="text-align:center;margin-top: 5px;">Цена: ${analog.price.toLocaleString('ru-RU')} р.</div>
                 `
             });
             marker.addListener('click', () => {
@@ -140,8 +147,16 @@ export class MapComponent implements OnInit {
             });
             marker.setMap(this.map);
             this.markers.push(marker);
+
+            let loc = new google.maps.LatLng(analog.latitude, analog.longitude);
+            bounds.extend(loc);
+
+            /*add current marker */
+            let currentMarkercoordinate = new google.maps.LatLng(this.currentMarker.lat, this.currentMarker.lon);
+            bounds.extend(currentMarkercoordinate);
         })
-    
+        this.map.fitBounds(bounds); 
+        this.map.panToBounds(bounds); 
 		
     }
     

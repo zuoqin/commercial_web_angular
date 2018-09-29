@@ -7,7 +7,7 @@
                <div class="styled-form__row">
                    <label class="left-label label">Адрес</label>
                    <div class="control">
-                       <autocomplete-places (onSelectAddress)="selectAddress($event)"></autocomplete-places>
+                       <autocomplete-places (onSelectAddress)="selectAddress($event)" [defaultValue]="historyParams ? historyParams.address: ''"></autocomplete-places>
                        <label 
                             *ngIf="(searchForm.get('lat').hasError('required') && searchForm.get('lat').touched) || (searchForm.get('lon').hasError('required') && searchForm.get('lon').touched)" 
                             class="error-field">Введите адресс</label>
@@ -80,7 +80,7 @@
                                <div 
                                     *ngFor="let analog of analogsCountList" 
                                     [class.active]="searchForm.controls['analogscount'].value==analog"
-                                    (click)="selectAnalog(analog)">
+                                    (click)="selectAnalogsCount(analog)">
                                     {{analog}}
                                 </div>
                            </div>
@@ -218,22 +218,7 @@
                     </div>
 
                 </div>
-                <div class="styled-form__row">
-                        <div class="two-column-row">
-                            <label class="styled-checkbox">
-                                <input type="checkbox" formControlName="includedepr"/>
-                                <span class="checkmark"></span>
-                                Включить аналоги ДЭПР
-                            </label>
-                        </div>
-                        <div class="two-column-row">
-                            <label class="styled-checkbox">
-                                <input type="checkbox" formControlName="includenondepr"/>
-                                <span class="checkmark"></span>
-                                Включить аналоги НЕ ДЭПР
-                            </label>
-                        </div>
-                    </div>
+              
 
                 <div class="btn btn--orange" (click)="submit()">{{btnText.text}}</div>
             </form>
@@ -243,10 +228,26 @@
         <div class="card map-block">
             <h2>Местоположение</h2>
             <div class="map-block__map">
-                <map #gmap></map>
+                <map #gmap (onInitMap)="onInitMap()"></map>
             </div>
           
             <div class="map-block__bottom" >
+                <div class="map-block__filter" *ngIf="currentObject">
+                    <div >
+                        <label class="styled-checkbox">
+                            <input type="checkbox" [(ngModel)]="includedepr" (change)="changeDepr()"/>
+                            <span class="checkmark"></span>
+                            Включить аналоги ДЭПР
+                        </label>
+                    </div>
+                    <div>
+                        <label class="styled-checkbox">
+                            <input type="checkbox"  [(ngModel)]="includenondepr" (change)="changeDepr()"/>
+                            <span class="checkmark"></span>
+                            Включить аналоги НЕ ДЭПР
+                        </label>
+                    </div>
+                </div>
                 <div *ngIf="currentPlaceObject">Координаты: {{currentPlaceObject.lat}}, {{currentPlaceObject.lon}}</div>
                 <div *ngIf="currentPlaceObject" class="address">
                     <label>Адрес</label>
@@ -261,6 +262,81 @@
     <div class="col col-1">
         <div class="card">
             <analogs-list [currentObject]="currentObject" (onChangeActiveAnalogs)="onChangeActiveAnalogs($event)"></analogs-list>
+        </div>
+    </div>
+</div>
+
+<div class="row" *ngIf="currentObject && searchForm.controls['approach'].value=='1'">
+    <div class="col col-1">
+        <div class="card">
+            <h2 class="more-margin">Детали расчета</h2>
+            <div class="detail-list">
+                <div class="detail-list__col">
+                    <div class="item">
+                        <label>Арендная ставка объекта оценки (в состоянии "стандартный ремонт"), руб./кв.м в год</label>
+                        <div>21 956.17</div>
+                    </div>
+                    <div class="item">
+                        <label>Площадь, кв.м., объекта оценки</label>
+                        <div>40.70</div>
+                    </div>
+    
+                    <div class="item">
+                        <label>Потенциальный валовой доход, руб.</label>
+                        <div>893 616.12</div>
+                    </div>
+                    <div class="item">
+                        <label>Потери от недозагрузки, %</label>
+                        <div>11.10</div>
+                    </div>
+                    <div class="item">
+                        <label>Потери от недозагрузки, руб.</label>
+                        <div>99 191.39</div>
+                    </div>
+                </div>
+                <div class="detail-list__col">
+                    <div class="item">
+                        <label>Действительный валовой доход, руб.</label>
+                        <div>794 424.73</div>
+                    </div>
+                    <div class="item">
+                        <label>Операционные расходы, %</label>
+                        <div>17.80</div>
+                    </div>
+                    <div class="item">
+                        <label>Операционные расходы, руб.</label>
+                        <div>159 063.67</div>
+                    </div>
+                    <div class="item">
+                        <label>Чистый операционный доход, руб.</label>
+                        <div>635 361.06</div>
+                    </div>
+                </div>
+                <div class="detail-list__col">
+                    <div class="item">
+                        <label>Ставка капитализации, %</label>
+                        <div>11.40</div>
+                    </div>
+                    <div class="item">
+                        <label>Стоимость объекта оценки без учета поправки на ремонт, руб.</label>
+                        <div>5 573 342.63</div>
+                    </div>
+                    <div class="item">
+                        <label>Поправка на ремонт, руб.</label>
+                        <div>0.00</div>
+                    </div>
+                    <div class="item">
+                        <label>Стоимость объекта оценки доходный подход, руб.</label>
+                        <div>5 573 342.63</div>
+                    </div>
+                    <div class="item">
+                        <label>Стоимость объекта оценки, руб./кв.м</label>
+                        <div>136 937.17</div>
+                    </div>
+                </div>
+                
+               
+            </div>
         </div>
     </div>
 </div>

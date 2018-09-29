@@ -1,4 +1,4 @@
-import { Component,ViewChild,Output,EventEmitter } from '@angular/core';
+import { Component,ViewChild,Output,EventEmitter, Input } from '@angular/core';
 
 import { GooglePlaceDirective } from "ngx-google-places-autocomplete";
 
@@ -8,6 +8,7 @@ import { GooglePlaceDirective } from "ngx-google-places-autocomplete";
 })
 export class AutocompletePlacesComponent {
 		@ViewChild("placesRef") placesRef : GooglePlaceDirective;
+		@Input('defaultValue') defaultValue;
 		@Output() onSelectAddress = new EventEmitter<any>();
 
 
