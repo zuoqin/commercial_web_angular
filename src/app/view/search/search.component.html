@@ -7,85 +7,82 @@
                <div class="styled-form__row">
                    <label class="left-label label">Адрес</label>
                    <div class="control">
-                       <autocomplete-places (onSelectAddress)="selectAddress($event)" [defaultValue]="historyParams ? historyParams.address: ''"></autocomplete-places>
+                       <autocomplete-places (onSelectAddress)="selectAddress($event)" [defaultValue]="historyParams ? historyParams.fulladdress: ''"></autocomplete-places>
                        <label 
-                            *ngIf="(searchForm.get('lat').hasError('required') && searchForm.get('lat').touched) || (searchForm.get('lon').hasError('required') && searchForm.get('lon').touched)" 
-                            class="error-field">Введите адресс</label>
+                            *ngIf="(searchForm.get('latitude').hasError('required') && searchForm.get('latitude').touched) || (searchForm.get('longitude').hasError('required') && searchForm.get('longitude').touched)" 
+                            class="error-field">Выберите адрес</label>
                    </div>
                </div>
                <div class="styled-form__row">
+                    <label class="left-label label">Тип объекта</label>
+                    <div class="control">
+                        <ng-select 
+                            [searchable]="false" 
+                            [clearable]="false"
+                            formControlName="specialitytype" 
+                            >
+                            <ng-option value="псн">ПСН</ng-option>
+                        </ng-select>
+                  
+                    </div>
+                </div>
+                <hr>
+                <ng-container  *ngFor="let floor of floorCount;let i = index">
+              
+                <div class="styled-form__row">
                     <label class="left-label label">Площадь (кв.м.)</label>
                     <div class="control">
                         <div>
                         <input 
                             type="text" 
-                            formControlName="totalsquare" 
+                            formControlName="totalarea" 
                             [textMask]="numberDecimalSpaceMaskOptions"
-                            class="styled-input three-column-row__1"
+                            class="styled-input w80"
                             />
                             <label 
-                                *ngIf="searchForm.get('totalsquare').hasError('required') && searchForm.get('totalsquare').touched" 
+                                *ngIf="searchForm.get('totalarea').hasError('required') && searchForm.get('totalarea').touched" 
                                 class="error-field">Введите площадь</label>
                         </div>
                        
                         <div class="control  three-column-row__2">
-                            <label class="label">Этаж</label>
+                            <label class="label">Состояние отделки</label>
                             <div>
-                                <input 
-                                    type="text"
-                                    formControlName="storey" 
-                                    [textMask]="numberSpaceMaskOptions"
-                                    class="styled-input"/>
-                                    <label 
-                                        *ngIf="searchForm.get('storey').hasError('required') && searchForm.get('storey').touched" 
-                                        class="error-field">Введите Этаж</label>
+                                    <ng-select 
+                                    class="mw295"
+                                    [searchable]="false" 
+                                    formControlName="conditiontype" 
+                                    
+                                    [clearable]="false"
+                                    >
+                                        <ng-option value="без отделки">Без отделки</ng-option>
+                                        <ng-option value="косметический">Косметический</ng-option>
+                                        <ng-option value="стандарт">Стандарт</ng-option>
+                                        <ng-option value="люкс">Люкс</ng-option>
+                                        <ng-option value="требует капитального ремонта">Требует капитального ремонта</ng-option>
+                                </ng-select>
+                           
                             </div>
-
-                        
-                        </div>
-                        <div class="control  three-column-row__3">
-                            <label class="label">Тип объекта</label>
-                            <ng-select 
-                                [searchable]="false" 
-                                [clearable]="false"
-                                formControlName="assignment" 
-                                >
-                                <ng-option value="псн">ПСН</ng-option>
-                            </ng-select>
                         </div>
                     </div>
                 </div>
+               
                 <div class="styled-form__row">
-                    <label class="left-label label">Состояние отделки</label>
+                    <label class="left-label label">Этаж</label>
                     <div class="control">
-                        <ng-select 
-                            class="mw295"
-                            [searchable]="false" 
-                            formControlName="repair" 
-                            
-                            [clearable]="false"
-                            >
-                                <ng-option value="Без отделки">Без отделки</ng-option>
-                                <ng-option value="Косметический">Косметический</ng-option>
-                                <ng-option value="Стандарт">Стандарт</ng-option>
-                                <ng-option value="Люкс">Люкс</ng-option>
-                                <ng-option value="Требует капитального ремонта">Требует капитального ремонта</ng-option>
-                        </ng-select>
+                        <div class="Floor-btn" (click)="addFloor()" *ngIf="floorCount.length==i+1">Добавить этаж <span></span></div>
+                        <div class="Floor-btn Floor-btn--remove" (click)="removeFloor(i)" *ngIf="floorCount.length!=i+1">Удалить этаж <span></span></div>
+                        <input 
+                            type="text"
+                            formControlName="floornumber" 
+                            [textMask]="numberSpaceMaskOptions"
+                            class="styled-input w80"/>
+                            <label 
+                                *ngIf="searchForm.get('floornumber').hasError('required') && searchForm.get('floornumber').touched" 
+                                class="error-field">Введите Этаж</label>
                     </div>
                 </div>
-                <div class="styled-form__row">
-                    <label class="left-label label">Аналогов</label>
-                    <div class="control">
-                           <div class="analog-list">
-                               <div 
-                                    *ngFor="let analog of analogsCountList" 
-                                    [class.active]="searchForm.controls['analogscount'].value==analog"
-                                    (click)="selectAnalogsCount(analog)">
-                                    {{analog}}
-                                </div>
-                           </div>
-                    </div>
-                </div>
+                <hr>
+            </ng-container>
                 <div class="styled-form__row">
                     <div class="two-column-row">
                         <label class="left-label label align-top">Подход к оценке</label>
@@ -95,7 +92,7 @@
                                     type="radio"
                                     formControlName="approach" 
                                     name="approach" 
-                                    value="0"
+                                    value="comparative"
                                     >
                                 Сравнительный
                                 <span class="radiobtn"></span>
@@ -105,7 +102,7 @@
                                     type="radio" 
                                     formControlName="approach"
                                     name="approach" 
-                                    value="1">
+                                    value="profitable">
                                 Доходный
                                 <span class="radiobtn"></span>
                             </label>
@@ -114,7 +111,7 @@
                                     type="radio"
                                     formControlName="approach" 
                                     name="approach" 
-                                    value="2">
+                                    value="arenda">
                                 Аренда
                                 <span class="radiobtn"></span>
                             </label>
@@ -174,18 +171,18 @@
                             <label class="styled-radio" >
                                 <input 
                                     type="radio" 
-                                    formControlName="houseline" 
-                                    name="houseline" 
-                                    value="true">
+                                    formControlName="houselinetype" 
+                                    name="houselinetype" 
+                                    value="первая">
                                 Первая
                                 <span class="radiobtn"></span>
                             </label>
                             <label class="styled-radio">
                                 <input 
                                     type="radio" 
-                                    formControlName="houseline" 
-                                    name="houseline" 
-                                    value="false">
+                                    formControlName="houselinetype" 
+                                    name="houselinetype" 
+                                    value="внутриквартальная">
                                 внутриквартальная
                                 <span class="radiobtn"></span>
                             </label>
@@ -199,18 +196,18 @@
                             <label class="styled-radio" >
                                 <input 
                                     type="radio" 
-                                    formControlName="isentrance"
-                                    name="isentrance" 
-                                    value="true">
+                                    formControlName="entrance"
+                                    name="entrance" 
+                                    value="общий">
                                 Отдельный
                                 <span class="radiobtn"></span>
                             </label>
                             <label class="styled-radio">
                                 <input 
                                     type="radio" 
-                                    formControlName="isentrance"
-                                    name="isentrance" 
-                                    value="false">
+                                    formControlName="entrance"
+                                    name="entrance" 
+                                    value="отдельный">
                                 Общий
                                 <span class="radiobtn"></span>
                             </label>
@@ -218,7 +215,19 @@
                     </div>
 
                 </div>
-              
+                <div class="styled-form__row">
+                    <label class="left-label label">Аналогов</label>
+                    <div class="control">
+                            <div class="analog-list">
+                                <div 
+                                    *ngFor="let analog of analogsCountList" 
+                                    [class.active]="searchForm.controls['countOfAnalogs'].value==analog"
+                                    (click)="selectAnalogsCount(analog)">
+                                    {{analog}}
+                                </div>
+                            </div>
+                    </div>
+                </div>
 
                 <div class="btn btn--orange" (click)="submit()">{{btnText.text}}</div>
             </form>
@@ -258,15 +267,24 @@
         </div>
     </div>
 </div>
+<!-- <ng-container *ngIf="totalPrice">
+цена 1 {{totalPrice.toFixed(0) | thousandsSpace}}<br>
+</ng-container>
+<ng-container *ngIf="totalPrice2">
+цена 2 {{totalPrice2.toFixed(0) | thousandsSpace}}<br>
+</ng-container>
+<ng-container *ngIf="averagePrice">
+средняя цена {{averagePrice.toFixed(0) | thousandsSpace}}<br>
+</ng-container> -->
 <div class="row" *ngIf="currentObject">
     <div class="col col-1">
         <div class="card">
-            <analogs-list [currentObject]="currentObject" (onChangeActiveAnalogs)="onChangeActiveAnalogs($event)"></analogs-list>
+            <analogs-list [currentObject]="currentObject" [averagePrice]="averagePrice" [type]="searchForm.controls['approach'].value" (onChangeActiveAnalogs)="onChangeActiveAnalogs($event)"></analogs-list>
         </div>
     </div>
 </div>
 
-<div class="row" *ngIf="currentObject && searchForm.controls['approach'].value=='1'">
+<div class="row" *ngIf="currentObject && searchForm.controls['approach'].value=='profitable'">
     <div class="col col-1">
         <div class="card">
             <h2 class="more-margin">Детали расчета</h2>
@@ -274,64 +292,64 @@
                 <div class="detail-list__col">
                     <div class="item">
                         <label>Арендная ставка объекта оценки (в состоянии "стандартный ремонт"), руб./кв.м в год</label>
-                        <div>21 956.17</div>
+                        <div>{{currentObject['арендная ставка объекта оценки (руб. кв.м в год)'].toFixed(2) | thousandsSpace}}</div>
                     </div>
                     <div class="item">
                         <label>Площадь, кв.м., объекта оценки</label>
-                        <div>40.70</div>
+                        <div>{{currentObject['площадь объекта оценки'].toFixed(2) | thousandsSpace }}</div>
                     </div>
     
                     <div class="item">
                         <label>Потенциальный валовой доход, руб.</label>
-                        <div>893 616.12</div>
+                        <div>{{currentObject['Потенциальный валовой_доход, руб.'].toFixed(2) | thousandsSpace }}</div>
                     </div>
                     <div class="item">
                         <label>Потери от недозагрузки, %</label>
-                        <div>11.10</div>
+                        <div>{{currentObject['Коэффициент недозагрузки, %'].toFixed(2) | thousandsSpace }}</div>
                     </div>
                     <div class="item">
                         <label>Потери от недозагрузки, руб.</label>
-                        <div>99 191.39</div>
+                        <div>{{currentObject['Потери от недозагрузки, руб.'].toFixed(2) | thousandsSpace }}</div>
                     </div>
                 </div>
                 <div class="detail-list__col">
                     <div class="item">
                         <label>Действительный валовой доход, руб.</label>
-                        <div>794 424.73</div>
+                        <div>{{currentObject['Действительный валовой доход, руб.'].toFixed(2) | thousandsSpace }}</div>
                     </div>
                     <div class="item">
                         <label>Операционные расходы, %</label>
-                        <div>17.80</div>
+                        <div>{{currentObject['Операционные расходы, %'].toFixed(2) | thousandsSpace }}</div>
                     </div>
                     <div class="item">
                         <label>Операционные расходы, руб.</label>
-                        <div>159 063.67</div>
+                        <div>{{currentObject['Операционные расходы, руб.'].toFixed(2) | thousandsSpace }}</div>
                     </div>
                     <div class="item">
                         <label>Чистый операционный доход, руб.</label>
-                        <div>635 361.06</div>
+                        <div>{{currentObject['Чистый операционный доход, руб.'].toFixed(2) | thousandsSpace }}</div>
                     </div>
                 </div>
                 <div class="detail-list__col">
                     <div class="item">
                         <label>Ставка капитализации, %</label>
-                        <div>11.40</div>
+                        <div>{{currentObject['Ставка капитализации, %'].toFixed(2) | thousandsSpace }}</div>
                     </div>
                     <div class="item">
                         <label>Стоимость объекта оценки без учета поправки на ремонт, руб.</label>
-                        <div>5 573 342.63</div>
+                        <div>{{currentObject['Стоимость объекта оценки без учета поправки на ремонт, руб.'].toFixed(2) | thousandsSpace }}</div>
                     </div>
                     <div class="item">
                         <label>Поправка на ремонт, руб.</label>
-                        <div>0.00</div>
+                        <div>{{currentObject['поправка ремонт, руб.'].toFixed(2) | thousandsSpace }}</div>
                     </div>
                     <div class="item">
                         <label>Стоимость объекта оценки доходный подход, руб.</label>
-                        <div>5 573 342.63</div>
+                        <div>{{currentObject['Стоимость объекта оценки доходный подход, руб.'].toFixed(2) | thousandsSpace }}</div>
                     </div>
                     <div class="item">
                         <label>Стоимость объекта оценки, руб./кв.м</label>
-                        <div>136 937.17</div>
+                        <div>{{currentObject['Стоимость объекта оценки за метр, руб.'].toFixed(2) | thousandsSpace }}</div>
                     </div>
                 </div>
                 

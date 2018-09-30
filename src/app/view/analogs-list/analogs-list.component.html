@@ -1,9 +1,19 @@
 <gallery-modal #gallery></gallery-modal>
 <div class="analogs-title">
-    <h2>Стоимость: {{currentObject.data.toFixed(0) | thousandsSpace}} р. (с учетом НДС) </h2>
-    <h2> Стоимость за метр: {{currentObject.avrgPricePerMetrCorrection.toFixed(0) | thousandsSpace}} р. (с учетом НДС) </h2>
+    <ng-container *ngIf="currentType=='comparative'">
+            <h2>Стоимость: {{currentObject['Стоимость объекта оценки сравнительный подход, руб.'].toFixed(0) | thousandsSpace}} р. (с учетом НДС) </h2>
+            <h2 *ngIf="averagePriceValue">Стоимость на основе двух подходов:<span class="nowrpap">{{averagePriceValue.toFixed(0) | thousandsSpace}} р. (с учетом НДС)</span></h2>
+            <h2 class="last"> Стоимость за метр: {{currentObject['Стоимость объекта оценки за метр, руб.'].toFixed(0) | thousandsSpace}} р. (с учетом НДС) </h2>
+    </ng-container>
+    <ng-container *ngIf="currentType=='profitable'">
+            <h2>Стоимость: {{currentObject['Стоимость объекта оценки доходный подход, руб.'].toFixed(0) | thousandsSpace}} р. (с учетом НДС)</h2>
+            <h2 *ngIf="averagePriceValue">Стоимость на основе двух подходов: <span class="nowrpap">{{averagePriceValue.toFixed(0) | thousandsSpace}} р. (с учетом НДС)</span></h2>
+            <h2 class="last"> Стоимость за метр: {{currentObject['Стоимость объекта оценки за метр, руб.'].toFixed(0) | thousandsSpace}} р. (с учетом НДС) </h2>
+    </ng-container>
+    <ng-container *ngIf="currentType=='arenda'">
+            <h2> Арендная ставка объекта оценки, руб./кв.м в год (с учетом НДС и ЭР без учета КП): {{currentObject['арендная ставка объекта оценки (руб. кв.м в год)'].toFixed(0) | thousandsSpace}} р.</h2>
+    </ng-container>
 </div>
-
 <div class="table-settings">
 
     <columns-filter (onSelectedColumns)="onSelectedColumns($event)" [columns]="columnsArray"></columns-filter>
@@ -16,95 +26,134 @@
         </label>
     </div>
 </div>
-<table 
-    class="styled-table"
-    [class.scale-font]="!ifShowCoeff"
-    >
-    <thead>
-        <tr>
-            <ng-container *ngFor="let column of columnsArray">
-                <ng-container *ngIf="column.active">
-                        <th *ngIf="!column.icon" [innerHtml]="column.name"></th>
+<div class="analog-list-table">
+    <table 
+        class="styled-table"
+        [class.scale-font]="!ifShowCoeff"
+        >
+        <thead>
+            <tr>
+                <ng-container *ngFor="let column of columnsArray">
+                    <ng-container *ngIf="column.active">
+                            <th *ngIf="!column.icon" [innerHtml]="column.name"></th>
 
-                        <th *ngIf="column.icon">
-                            <img src="/assets/img/icons/{{column.icon}}.svg"/>
-                        </th>
+                            <th *ngIf="column.icon">
+                                <img src="/assets/img/icons/{{column.icon}}.svg"/>
+                            </th>
+                    </ng-container>
+                
                 </ng-container>
-               
-            </ng-container>
-        </tr>
-    </thead>
-    <tbody>
-
-            <tr *ngFor="let analog of currentObject.analogs">
-                <td *ngIf="isColumnActive('1')" class="text-center align-middle" width="95">
-                    <label class="styled-checkbox styled-checkbox--without-label">
-                        <input type="checkbox" [checked]="analog.active" (change)="changeActiveAnalog(analog)"/>
-                        <span class="checkmark"></span>
-                    </label>
-                </td>
-                <td *ngIf="isColumnActive('2')" class="address">
-                    {{analog.address}}
-                    <div *ngIf="analog.url || analog.screenpath" class="icons-link">
-                        <div  *ngIf="analog.screenpath && analog.screenpath.length>10" (click)="showImage('http://snapshots.eliz.site/'+analog.screenpath)" >
-                            <svg-icon src="/assets/img/image.svg"></svg-icon>
-                        </div>
-                        <a *ngIf="analog.url" target="_blank" href="{{analog.url}}"><svg-icon src="/assets/img/link.svg"></svg-icon></a>  
-                    </div>
-                    
-                  
-                </td>
-                <td  *ngIf="isColumnActive('3')">
-                    {{ analog.repair ? analog.repair:'Н/Д'}}
-                </td>
-                <td  *ngIf="isColumnActive('4')">
-                    {{analog.totalsquare}}
-                </td>
-                <td  *ngIf="isColumnActive('5')">
-                    {{analog.price.toFixed(0) | thousandsSpace}}
-                </td>
-                <td  *ngIf="isColumnActive('6')">
-                    {{analog.price_per_meter.toFixed(0) | thousandsSpace}} /
-                    {{analog.price_per_meter_correction.toFixed(0) | thousandsSpace}}
-                </td>
-         
-                <td  *ngIf="isColumnActive('7')">
-                    {{analog.koeff1}}
-                </td>
-                <td  *ngIf="isColumnActive('8')">
-                    {{analog.koeff2}}
-                </td>
-                <td  *ngIf="isColumnActive('9')">
-                    {{analog.koeff3}}
-                </td>
-                <td  *ngIf="isColumnActive('10')">
-                    {{analog.koeff4}}
-                </td>
-                <td  *ngIf="isColumnActive('11')">
-                    {{analog.koeff5}}
-                </td>
-                <td  *ngIf="isColumnActive('12')">
-                    {{analog.koeff6}}
-                </td>
-                <td  *ngIf="isColumnActive('13')">
-                    {{analog.koeff7}}
-                </td>
-                <td  *ngIf="isColumnActive('14')">
-                    {{analog.koeff8}}
-                </td>
-                <td  *ngIf="isColumnActive('15')">
-                    {{analog.koeff9}}
-                </td>
-                <td  *ngIf="isColumnActive('16')">
-                    {{analog.koeff9}}
-                </td>
-                <td *ngIf="isColumnActive('17')">
-                    {{analog.koeff}}
-                </td>
-        
             </tr>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+
+                <tr [class.is-depr]="analog.isDepr" *ngFor="let analog of currentObject.analogs">
+                    <td *ngIf="isColumnActive('1')" class="text-center align-middle" width="95">
+                        <label class="styled-checkbox styled-checkbox--without-label">
+                            <input type="checkbox" [checked]="analog.active" (change)="changeActiveAnalog(analog,$event)"/>
+                            <span class="checkmark"></span>
+                        </label>
+                    </td>
+                    <td *ngIf="isColumnActive('2')" class="address">
+                        {{analog.fulladdress}}
+                        <div *ngIf="analog.url || analog.screenpath" class="icons-link">
+                            <div  *ngIf="analog.screenpath && analog.screenpath.length>10" (click)="showImage('http://snapshots.eliz.site/'+analog.source+'/'+analog.screenpath)" >
+                                <svg-icon src="/assets/img/image.svg"></svg-icon>
+                            </div>
+                            <a *ngIf="analog.url" target="_blank" href="{{analog.url}}"><svg-icon src="/assets/img/link.svg"></svg-icon></a>  
+                        </div>
+                        
+                    
+                    </td>
+                    <td  *ngIf="isColumnActive('3')">
+                        {{ analog.conditiontype ? analog.conditiontype:'Н/Д'}}
+                    </td>
+                    <td  *ngIf="isColumnActive('18')">
+                        {{ analog.entrance ? analog.entrance:'Н/Д'}}
+                    </td>
+                    <td  *ngIf="isColumnActive('19')">
+                        {{ analog.houselinetype ? analog.houselinetype:'Н/Д'}}
+                    </td>
+                    <td  *ngIf="isColumnActive('20')">
+                        <ng-container *ngIf="analog.hasshopwindows">
+                                {{ analog.hasshopwindows=='true' ? 'да':'нет'}}
+                        </ng-container>
+                        <ng-container *ngIf="!analog.hasshopwindows">
+                                Н/Д
+                        </ng-container>
+                    </td>
+                    <td  *ngIf="isColumnActive('21')">
+                        <ng-container *ngIf="analog.isbuildingliving">
+                                {{ analog.isbuildingliving=='true' ? 'жилой':'нежилой'}}
+                        </ng-container>
+                        <ng-container *ngIf="!analog.isbuildingliving">
+                                Н/Д
+                        </ng-container>
+                    </td>
+                    <td  *ngIf="isColumnActive('22')">
+                        {{ analog.floornumber ? analog.floornumber:'Н/Д'}}
+                    </td>
+
+
+                    <td  *ngIf="isColumnActive('4')">
+                        {{analog.totalarea}}
+                    </td>
+                    <td  *ngIf="isColumnActive('5')">
+                        <ng-container *ngIf="currentType=='comparative'">
+                            {{analog.price.toFixed(0) | thousandsSpace}}
+                        </ng-container>
+                        <ng-container *ngIf="currentType=='profitable' || currentType=='arenda'">
+                            {{analog['арендная ставка руб. кв.м в год'].toFixed(0) | thousandsSpace}}
+                        </ng-container>
+                    </td>
+                    <td  *ngIf="isColumnActive('6')">
+                        <ng-container *ngIf="currentType=='comparative'">
+                            {{analog['цена за метр'].toFixed(0) | thousandsSpace}} /
+                            {{analog['скорректированная цена за метр'].toFixed(0) | thousandsSpace}}
+                        </ng-container>
+                        <ng-container *ngIf="currentType=='profitable' || currentType=='arenda'">
+                            {{analog['скорректированная арендная ставка руб. кв.м в год'].toFixed(0) | thousandsSpace}}
+                        </ng-container>
+                    </td>
+            
+                    <td  *ngIf="isColumnActive('7')">
+                        {{analog.correction["поправка на торг"].toFixed(2)}}
+                    </td>
+                    <td  *ngIf="isColumnActive('8')">
+                        {{analog.correction.locationKoef.toFixed(2)}}
+                    </td>
+                    <td  *ngIf="isColumnActive('9')">
+                        {{analog.correction.metrodistanceKoef.toFixed(2)}}
+                    </td>
+                    <td  *ngIf="isColumnActive('10')">
+                        {{analog.correction.totalareaKoef.toFixed(2)}}
+                    </td>
+                    <td  *ngIf="isColumnActive('11')">
+                        {{analog.correction.floornumberKoef.toFixed(2)}}
+                    </td>
+                    <td  *ngIf="isColumnActive('12')">
+                        {{analog.correction.entranceKoef.toFixed(2)}}
+                    </td>
+                    <td  *ngIf="isColumnActive('13')">
+                        {{analog.correction.houselinetypeKoef.toFixed(2)}}
+                    </td>
+                    <td  *ngIf="isColumnActive('14')">
+                        {{analog.correction.conditiontypeKoef.toFixed(2)}}
+                    </td>
+                    <td  *ngIf="isColumnActive('15')">
+                        {{analog.correction.hasshopwindowsKoef.toFixed(2)}}
+                    </td>
+                    <td  *ngIf="isColumnActive('16')">
+                        {{analog.correction.isbuildinglivingKoef.toFixed(2)}}
+                    </td>
+                    <td *ngIf="isColumnActive('17')">
+                        {{analog.finalCorrectionKoef.toFixed(2)}}
+                    </td>
+            
+                </tr>
+        </tbody>
+    </table>
+</div>
 <div class="coefficient-list" *ngIf="ifShowCoeff">
     <ng-container *ngFor="let column of columnsArray">
         <div class="item"  *ngIf="column.icon">

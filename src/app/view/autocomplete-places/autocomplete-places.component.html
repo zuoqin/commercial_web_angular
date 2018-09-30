@@ -2,7 +2,9 @@
     ngx-google-places-autocomplete 
     [options]='optionsGooglePlaces' 
     #placesRef="ngx-places" 
+    #autocomplete
     (onAddressChange)="addressSelect($event)" 
     class="styled-input" 
     [value]="defaultValue"
+    (keyup.enter)="keypress($event)"
     placeholder="Поиск по адресу"/>

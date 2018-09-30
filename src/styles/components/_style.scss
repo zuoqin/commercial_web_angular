@@ -33,9 +33,13 @@
     }
 }
 .styled-table{
+    border-collapse: separate;
     border-spacing: 0;
-    border-collapse: collapse;
     width: 100%;
+    
+    // @document url("https://example.com") { 
+    //     border-collapse: initial;
+    // }
     thead{
 
         th{
@@ -54,8 +58,23 @@
     th,td{
         height: 60px;
     }
+    /*one pixel border forefox hack*/
+    tr th:last-child, tr td:last-child {
+        border-right: solid 1px rgba(20, 30, 48, 0.23) !important;
+    }
+    
+    tr:last-child th,  tr:last-child td {
+        border-bottom: solid 1px rgba(20, 30, 48, 0.23) !important;
+    }
+    /*one pixel border forefox hack*/
+
+    
     td{
-        border: 1px solid rgba(20, 30, 48, 0.23);
+
+        border-left: solid 1px rgba(20, 30, 48, 0.23);
+        border-top: solid 1px rgba(20, 30, 48, 0.23);
+        border-right: none;
+        border-bottom: none;
         color: #141E30;
         font-size: 13px;
         line-height: 16px;
@@ -99,8 +118,12 @@
     }
     
 
+    
     tr:nth-child(even) td{
         background: #DDE9FF;
+    }
+    tr.is-depr td{
+        background-color: beige;
     }
     tr:hover td{
         background: #C0D5FC;
@@ -164,6 +187,10 @@
         font-size: 18px;
         line-height: 20px;
         min-width: 33.33%;
+        &.last{
+            padding-left: 50px;
+            text-align: right;
+        }
     }
 }
 .detail-list{
@@ -202,4 +229,8 @@
             min-width: 95px;
         }
     }
+}
+.analog-list-table{
+    max-width: 100%;
+    overflow-y: auto;
 }

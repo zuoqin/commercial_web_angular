@@ -20,17 +20,18 @@ export class HistoryComponent implements OnInit {
   navigateToFoo(arrayParams){
   
     this.searchService.storage = arrayParams;
+    console.log(arrayParams)
     this._router.navigate(['/search']);
 
   }
 
 
   ngOnInit(){
-    this.searchService.getHistiry()
+    this.searchService.getHistory()
       .subscribe(
         response => {
-          this.historyArray = response.data;
-         console.log(response)
+          this.historyArray = JSON.parse(response).data;
+         console.log(JSON.parse(response).data)
         },
         errors => {
 

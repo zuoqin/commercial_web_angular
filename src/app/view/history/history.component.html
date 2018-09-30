@@ -25,16 +25,16 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let history of historyArray" class="cursor" (click)="navigateToFoo(history)">
-                        <td>{{history.address.length ? history.address : history.lat+', '+history.lon }}</td>
+                        <td>{{history.fulladdress.length ? history.fulladdress : history.latitude+', '+history.longitude }}</td>
                         <td>{{history.approach}}</td>
                         <td>{{history.conditiontype}}</td>
-                        <td>{{history.entrance ? 'отдельный':'общий'}}</td>
-                        <td>{{history.houseline ? 'первая':'внутриквартальная'}}</td>
-                        <td>{{history.shopwindows ? 'есть':'нет'}}</td>
-                        <td>{{history.buildingtype ? 'жилой':'нежилой'}}</td>
-                        <td>{{history.storey}}</td>
+                        <td>{{history.entrance}}</td>
+                        <td>{{history.houselinetype}}</td>
+                        <td>{{history.hasshopwindows ? 'есть':'нет'}}</td>
+                        <td>{{history.isbuildingliving ? 'жилой':'нежилой'}}</td>
+                        <td>{{history.floornumber}}</td>
                         <td>{{history.totalarea}}</td>
-                        <td>{{history.analogs}}</td>
+                        <td>{{history.countofanalogs}}</td>
                     </tr>
                 </tbody>
             </table>

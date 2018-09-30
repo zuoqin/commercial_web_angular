@@ -16,12 +16,33 @@ export class SearchService {
 
       public storage: any;
       
-    estimate(body): Observable<any> {
-        return this.apiService.post('/estimate',body)
+    estimate(url,body): Observable<any> {
+        return this.apiService.post('/'+url,body,true)
           .pipe(map(data => data));
     }
-    getHistiry(): Observable<any> {
-        return this.apiService.get('/history')
+    customAnalogs(url,body): Observable<any> {
+        return this.apiService.post('/'+url,body,true)
           .pipe(map(data => data));
     }
+
+
+    
+    // comparative(body): Observable<any> {
+    //     return this.apiService.post('/comparative',body)
+    //       .pipe(map(data => data));
+    // }
+    // arenda(body): Observable<any> {
+    //     return this.apiService.post('/arenda',body)
+    //       .pipe(map(data => data));
+    // }
+    
+    getHistory(): Observable<any> {
+        return this.apiService.get('/gethistory')
+          .pipe(map(data => data));
+    }
+    writeHistory(body): Observable<any> {
+        return this.apiService.post('/writehistory',body,true)
+          .pipe(map(data => data));
+    }
+    
 }

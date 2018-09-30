@@ -5,22 +5,50 @@ import { Component, Input, OnInit, Output,EventEmitter,ViewChild } from '@angula
   templateUrl: './analogs-list.component.html'
 })
 export class AnalogsListComponent implements OnInit {
+    @ViewChild('gallery') gallery: any;
+    @Input('averagePrice') set average(averagePrice){
 
-	@ViewChild('gallery') gallery: any;
+        this.averagePriceValue = averagePrice;
+    }
+    @Input('type')  set tpe(type) {
+  
+        // if(this.currentType && (this.currentType=="comparative" || this.currentType=="profitable") && (type=="comparative" || type =="profitable")){
+        //     console.log('высчитать среднее значение', this.averageValue)
+        // }
+     
+
+        this.currentType = type;
+
+        let columnName1 = 'Арендная ставка предложения, руб./кв.м в год с НДС без КП';
+        let columnName2 = 'Скорректированная арендная ставка предложения, руб./кв.м в год с НДС без КП';
+        if(this.currentType=="comparative"){
+            columnName1="Цена предложения"
+            columnName2="Цена предложения&nbsp;/<br> скорректированная цена за кв. м.";
+
+        }
+        this.columnsArray.filter(column=>column.id==5)[0].name = columnName1
+        this.columnsArray.filter(column=>column.id==6)[0].name = columnName2
+    }
     @Input('currentObject') 
     set object(object) {
-        object.analogs.map(analog=>{
-            analog['active'] = true;
-            analog['price_per_meter'] = analog.price/analog.totalsquare;
-            analog['price_per_meter_correction'] = analog.price_correction/analog.totalsquare;
-        })
+     
+        if(!this.currentObject){
+            object.analogs.map(analog=>{
+                analog['active'] = true;
+                // analog['price_per_meter'] = analog.price/analog.totalsquare;
+                // analog['price_per_meter_correction'] = analog.price_correction/analog.totalsquare;
+            })
+        }
+    
 
 
         this.currentObject = object;
+
     
     }
     @Output() onChangeActiveAnalogs = new EventEmitter<any>();
-    
+    averagePriceValue;
+    currentType;
     currentObject;
     ifShowCoeff:boolean = true;
     columnsArray = [
@@ -40,17 +68,43 @@ export class AnalogsListComponent implements OnInit {
             id:3
         },
         {
+            name:"Вход",
+            active:true,
+            id:18
+        },
+        {
+            name:"Линия застройки",
+            active:true,
+            id:19
+        },
+        {
+            name:"Наличие витринных окон",
+            active:true,
+            id:20
+        },
+        {
+            name:"Тип здания",
+            active:true,
+            id:21
+        },
+        
+        {
+            name:"Этаж",
+            active:true,
+            id:22
+        },
+        {
             name:"Площадь, кв. м.",
             active:true,
             id:4
         },
         {
-            name:"Цена предложения",
+            name:"",
             active:true,
             id:5
         },
         {
-            name:"Цена предложения&nbsp;/<br> скорректированная цена за кв. м.",
+            name:"",
             active:true,
             id:6
         },
@@ -149,10 +203,16 @@ export class AnalogsListComponent implements OnInit {
     isColumnActive(id){
         return this.columnsArray.filter(item=>item.id==id)[0].active
     }
-    changeActiveAnalog(analog){
+    changeActiveAnalog(analog,event){
         console.log('change')
-      
         analog.active = !analog.active;
+        if(this.currentObject.analogs.filter(analog=>analog.active).length==0){
+            analog.active = true;
+            event.target.checked = true;
+            return false;
+        }
+       
+        console.log()
         this.onChangeActiveAnalogs.emit(this.currentObject.analogs.filter(analog=>analog.active))
     }
     showImage(url){

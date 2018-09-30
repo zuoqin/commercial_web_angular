@@ -12,7 +12,7 @@ export class GalleryModalComponent implements OnInit {
 	@ViewChild('galleryModal')  galleryModal: BsModalComponent;
 	imageUrl;
 	ngOnInit(){
-		console.log(this.urlImage)
+		//console.log(this.urlImage)
 	}
 	open(url){
 		this.imageUrl = 	url

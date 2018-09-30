@@ -1,6 +1,6 @@
 import { Component, OnInit,ViewChild,Output,EventEmitter } from '@angular/core';
 import {} from '@types/googlemaps';
-
+declare var MarkerClusterer:any;
 @Component({
   selector: 'map',
   templateUrl: './map.component.html',
@@ -8,10 +8,12 @@ import {} from '@types/googlemaps';
 })
 export class MapComponent implements OnInit {
     @ViewChild('gmap') gmapElement: any;
+    isDublicate = false;
 	map: google.maps.Map;
     markers: google.maps.Marker[] = [];
     mainMarker: google.maps.Marker[] = [];
     public currentMarker;
+    markerCluster;
     @Output() onInitMap = new EventEmitter<any>();
    
     ngOnInit(){
@@ -59,8 +61,13 @@ export class MapComponent implements OnInit {
         while (this.markers.length) {
 			const marker = this.markers.pop();
 			google.maps.event.clearInstanceListeners(marker);
-			marker.setMap(null);
-		}
+            marker.setMap(null);
+           
+           
+        }
+        if(this.markerCluster){
+             this.markerCluster.clearMarkers();
+        }
     }
     removeMainMarker(){
         while (this.mainMarker.length) {
@@ -105,11 +112,45 @@ export class MapComponent implements OnInit {
         }
 
         let bounds  = new google.maps.LatLngBounds();
-        
+
+//         latitude: 55.793045
+// longitude: 37.563646
+        //console.log(analogs)
+      
+     
+       if(this.isDublicate){
+        analogs = analogs.concat(analogs)
+       }
+      
+        console.log(analogs)
         analogs.map(analog=>{
-            const coordinate = new google.maps.LatLng(analog.latitude, analog.longitude);
+
+
+            //get array of markers currently in cluster
+            let allMarkers = this.markers;
+
+            //final position for marker, could be updated if another marker already exists in same position
+            let finalLatLng = new google.maps.LatLng(analog.latitude, analog.longitude);
+
+            //check to see if any of the existing markers match the latlng of the new marker
+            if (allMarkers.length != 0) {
+                for (let i=0; i < allMarkers.length; i++) {
+                    var existingMarker = allMarkers[i];
+                    var pos = existingMarker.getPosition();
+
+                    //if a marker already exists in the same position as this marker
+                    if (finalLatLng.equals(pos)) {
+                        //update the position of the coincident marker by applying a small multipler to its coordinates
+                        var newLat = finalLatLng.lat() + (Math.random() -.5) / 1200;// * (Math.random() * (max - min) + min);
+                        var newLng = finalLatLng.lng() + (Math.random() -.5) / 1200;// * (Math.random() * (max - min) + min);
+                        finalLatLng = new google.maps.LatLng(newLat,newLng);
+                    }
+                }
+            }
+
+           // const coordinate = new google.maps.LatLng(analog.latitude, analog.longitude);
             let color;
-            if(analog.isdepr){
+            if(analog.isDepr){
                 color = 'red';
             }else{
                 color = 'yellow';
@@ -123,7 +164,7 @@ export class MapComponent implements OnInit {
             };
 
             const marker = new google.maps.Marker({ 
-                position: coordinate,
+                position: finalLatLng,
                 icon: icon,
                 animation: google.maps.Animation.DROP,
                 
@@ -131,14 +172,14 @@ export class MapComponent implements OnInit {
    
             const infowindow = new google.maps.InfoWindow({
                 content: `
-                <div style="margin-top: 5px;">Адрес: ${analog.address ? analog.address:'Н/Д'}</div>
-                <div style="margin-top: 5px;">Тип ремонта: ${analog.repair ? analog.repair:'Н/Д'}</div>
+                <div style="margin-top: 5px;">Адрес: ${analog.fulladdress ? analog.fulladdress:'Н/Д'}</div>
+                <div style="margin-top: 5px;">Тип ремонта: ${analog.conditiontype ? analog.conditiontype:'Н/Д'}</div>
                 <div style="margin-top: 5px;">Вход: ${analog.entrance ? analog.entrance:'Н/Д'}</div>
                 <div style="margin-top: 5px;">Линия застройки: ${analog.houselinetype ? analog.entrance:'Н/Д'}</div>
-                <div style="margin-top: 5px;">Площадь: ${analog.totalsquare ? analog.totalsquare.toLocaleString('ru-RU') :'Н/Д' } м²</div>
+                <div style="margin-top: 5px;">Площадь: ${analog.totalarea ? analog.totalarea.toLocaleString('ru-RU') :'Н/Д' } м²</div>
                 <div style="margin-top: 5px;">Наличие витринных окон: ${analog.hasshopwindows=='true' ? 'есть':'нет'}</div>
                 <div style="margin-top: 5px;">Тип здания: ${analog.isbuildingliving=='true' ? 'жилой':'нежилой'}</div>
-                <div style="margin-top: 5px;">Этаж: ${analog.floor ? analog.floor:'Н/Д'}</div>
+                <div style="margin-top: 5px;">Этаж: ${analog.floornumber ? analog.floornumber:'Н/Д'}</div>
                 <div style="text-align:center;margin-top: 5px;">Цена: ${analog.price.toLocaleString('ru-RU')} р.</div>
                 `
             });
@@ -151,10 +192,20 @@ export class MapComponent implements OnInit {
             let loc = new google.maps.LatLng(analog.latitude, analog.longitude);
             bounds.extend(loc);
 
+          
             /*add current marker */
             let currentMarkercoordinate = new google.maps.LatLng(this.currentMarker.lat, this.currentMarker.lon);
             bounds.extend(currentMarkercoordinate);
         })
+        let mcOptions = {
+            gridSize: 15, 
+            maxZoom: 15,
+            imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+        };
+        //this.markerCluster = new MarkerClusterer(this.map, this.markers,mcOptions);
+      
+        // var markerCluster = new markerCluster(this.map, this.markers,
+        //     {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
         this.map.fitBounds(bounds); 
         this.map.panToBounds(bounds); 
 		

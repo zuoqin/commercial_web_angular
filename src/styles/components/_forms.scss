@@ -107,6 +107,11 @@ fieldset{
     }
 }
 .styled-form{
+    hr{
+        border: none;
+    border-top: 1px solid #bfc2c7;
+    margin: 0 0 20px;
+    }
     &__row{
         display: flex;
         margin-bottom: 20px;
@@ -123,7 +128,6 @@ fieldset{
         position: absolute;
         top: 100%;
         color: #e82b2b;
-        padding-left: 17px;
         padding-top: 3px;
     }
     .label{
@@ -143,7 +147,7 @@ fieldset{
             min-width: 10.5%;
         }
         &__2{
-            min-width: 30.5%;
+            min-width: 79%;
         }
         &__3{
             min-width: 54%;
@@ -172,7 +176,7 @@ fieldset{
             padding-left: 20px;
         }
     }
-    .styled-radio{
+    .styled-radio:not(:last-child){
         margin-bottom: 12px;
     }
 }
@@ -251,4 +255,49 @@ fieldset{
         }
     }
    
+}
+.Floor-btn{
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+    color: #508a54;
+    width: auto !important;
+    bottom: 0;
+    display: inline-flex;
+    align-items: center;
+    span{
+        margin-left: 10px;
+        display: block;
+        width: 16px;
+        height: 16px;
+        border-radius: 100%;
+        border: 2px solid #508a54;
+        position: relative;
+        &:after,&:before{
+            content: "";
+            display: block;
+            width: 8px;
+            height: 2px;
+            background: #508a54;
+            position: absolute;
+            left: 50%;
+            margin-left: -4px;
+            top: 5px;
+        }
+        &:after{
+            transform: rotate(-90deg)
+        }
+    }
+    &--remove{
+        color: #ff4f4f;
+        span{
+            border-color:#ff4f4f;
+            &:before{
+                background: #ff4f4f;
+            }
+            &:after{
+                display: none;
+            }
+        }
+    }
 }

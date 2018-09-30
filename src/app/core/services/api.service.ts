@@ -12,6 +12,11 @@ const httpOptions = {
     "Access-Control-Allow-Origin":"*"
   })
 };
+const needHttpOptions = {
+	headers: new HttpHeaders({
+		'Content-Type':  'application/x-www-form-urlencoded'
+	})
+};
 @Injectable()
 export class ApiService {
   constructor(
@@ -34,13 +39,24 @@ export class ApiService {
     ).pipe(catchError(this.formatErrors));
   }
 
-  post(path: string, body: Object = {}): Observable<any> {
-    return this.http.post(
-      `${environment.api_url}${path}`,
-      body,
-      httpOptions
-    ).pipe(catchError(this.formatErrors));
+  post(path: string, body: Object = {},needptions?): Observable<any> {
+    if(needptions){
+      return this.http.post(
+        `${environment.api_url}${path}`,
+        body,
+          needHttpOptions
+      ).pipe(catchError(this.formatErrors));
+    }else{
+
+      return this.http.post(
+        `${environment.api_url}${path}`,
+        JSON.stringify(body)
+      ).pipe(catchError(this.formatErrors));
+    }
+
   }
+
+
 
   delete(path): Observable<any> {
     return this.http.delete(
