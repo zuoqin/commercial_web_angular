@@ -51,7 +51,7 @@ export class SearchComponent implements OnInit {
 		private formBuilder: FormBuilder,
 		private searchService:SearchService
 	){
-		console.log();
+	
 		this.historyParams =this.searchService.storage
 	
 	}
@@ -70,7 +70,7 @@ export class SearchComponent implements OnInit {
 		}
 	}
 	initHistory(){
-		console.log(this.historyParams)
+
 		this.searchForm.controls['fulladdress'].setValue(this.historyParams.fulladdress);
 		
 			this.searchForm.controls['countOfAnalogs'].setValue(this.historyParams.countofanalogs);
@@ -169,7 +169,7 @@ export class SearchComponent implements OnInit {
 	
         this.updateSearchFilter(this.searchForm.value);
 		let body = this.serialize(this.search);
-		console.log(this.ifTuchAnotherField)
+
 		if(this.ifTuchAnotherField){
 			this.currentTypeSearch = null;
 			this.totalPrice = null;
@@ -191,21 +191,21 @@ export class SearchComponent implements OnInit {
 					response => {
 						if(this.searchForm.controls['approach'].value=="profitable" || this.searchForm.controls['approach'].value=="comparative"){
 							if(!this.currentTypeSearch){
-								console.log('считаем первую цену')
+						
 								this.currentTypeSearch = this.searchForm.controls['approach'].value;
 								this.calcFirstPrice(response)
 							}else if(this.currentTypeSearch && this.currentTypeSearch== this.searchForm.controls['approach'].value){
-								console.log('обновляем первую цену')
+						
 								this.currentTypeSearch = this.searchForm.controls['approach'].value;
 								this.calcFirstPrice(response)
 							}else if(this.currentTypeSearch && this.currentTypeSearch!= this.searchForm.controls['approach'].value){
 								this.calcSecondPrice(response)
-								console.log('считаем вторую и выводим среднее')
+							
 
 							}
 					
 						}else{
-							console.log('аренда, обнуляем среднюю цену')
+						
 							this.currentTypeSearch = null;
 							this.totalPrice = null;
 							this.totalPrice2 = null;
@@ -214,19 +214,7 @@ export class SearchComponent implements OnInit {
 						
 						
 						
-					
-						// if(!this.ifTuchAnotherField){
-						// 	//this.calcAveragePrice(this.currentTypeSearch,response);
-						// 	console.log(this.searchForm.controls['longitude'].value)
-						// 	console.log(this.totalPrice.id)
-						// 	if(!this.totalPrice2.price){
-								
-						// 	}
-						// 		this.calcFirstPrice(response);
-							
-					
-						// }
-					
+			
 						
 						
 					
@@ -243,6 +231,7 @@ export class SearchComponent implements OnInit {
 					errors => {
 					this.isSubmitting = false;
 					this.btnText.text = this.btnText.default;
+					alert('Ошибка, попробуйте позже')
 						console.log(errors)
 					}
 				);
@@ -272,7 +261,7 @@ export class SearchComponent implements OnInit {
 				this.totalPrice2 = response['Стоимость объекта оценки сравнительный подход, руб.']
 			}
 
-			console.log(this.totalPrice2)
+		
 			this.averagePrice = this.totalPrice*0.5+this.totalPrice2*0.5;
 		
 	}
@@ -293,7 +282,7 @@ export class SearchComponent implements OnInit {
 		this.searchForm.controls['countOfAnalogs'].setValue(analog);
 	}
 	selectAddress(value){
-		//console.log(value)
+	
 		this.searchForm.controls['fulladdress'].setValue(value.address)
 		this.searchForm.controls['latitude'].setValue(value.lat)
 		this.searchForm.controls['longitude'].setValue(value.lon)
@@ -310,24 +299,17 @@ export class SearchComponent implements OnInit {
 
 
 
-		let idArray;
-		let isDeprArray;
+		let idArray = '';
+		let isDeprArray = '';
 	
 		this.currentAnalogsList.map(analog=>{
-			if(idArray){
-				idArray += ','+analog.id;
-			}else{
-				idArray = analog.id;
-			}
-			if(isDeprArray){
-				isDeprArray += ','+analog.isDepr;
-			}else{
-				isDeprArray = analog.isDepr;
-			}
+			isDeprArray += analog.isDepr+',';
+			idArray += analog.id+',';
+		
 		})
 	
-		this.searchForm.controls['idArray'].setValue(idArray);
-		this.searchForm.controls['isDeprArray'].setValue(isDeprArray);
+		this.searchForm.controls['idArray'].setValue(idArray.slice(0, -1));
+		this.searchForm.controls['isDeprArray'].setValue(isDeprArray.slice(0, -1));
 		
 
 
@@ -355,10 +337,10 @@ export class SearchComponent implements OnInit {
 						}
 					
 						if(this.totalPrice2){
-							console.log('есть вторая цена, обновляем ее')
+						
 							this.calcSecondPrice(response);
 						}else{
-							console.log('обновляем первую')
+						
 							this.calcFirstPrice(response)
 						}
 
@@ -380,7 +362,7 @@ export class SearchComponent implements OnInit {
 		})
 	}
 	removeFloor(i){
-		console.log(this.floorCount)
+	
 		this.floorCount.splice(i,1)
 	}
 	serialize(obj) {

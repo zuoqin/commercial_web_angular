@@ -26,7 +26,7 @@
                 <tbody>
                     <tr *ngFor="let history of historyArray" class="cursor" (click)="navigateToFoo(history)">
                         <td>{{history.fulladdress.length ? history.fulladdress : history.latitude+', '+history.longitude }}</td>
-                        <td>{{history.approach}}</td>
+                        <td>{{approach[history.approach]}}</td>
                         <td>{{history.conditiontype}}</td>
                         <td>{{history.entrance}}</td>
                         <td>{{history.houselinetype}}</td>

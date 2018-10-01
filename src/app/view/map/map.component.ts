@@ -118,11 +118,11 @@ export class MapComponent implements OnInit {
         //console.log(analogs)
       
      
-       if(this.isDublicate){
-        analogs = analogs.concat(analogs)
-       }
+    //    if(this.isDublicate){
+    //     analogs = analogs.concat(analogs)
+    //    }
       
-        console.log(analogs)
+
         analogs.map(analog=>{
 
 

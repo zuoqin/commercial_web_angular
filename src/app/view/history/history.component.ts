@@ -16,11 +16,15 @@ export class HistoryComponent implements OnInit {
   ){
     this.searchService.storage = null;
   }
+  approach = {
+    comparative:"Сравнительный",
+    profitable:"Доходный",
+    arenda:"Аренда"
+  }
 
   navigateToFoo(arrayParams){
   
     this.searchService.storage = arrayParams;
-    console.log(arrayParams)
     this._router.navigate(['/search']);
 
   }
@@ -31,11 +35,11 @@ export class HistoryComponent implements OnInit {
       .subscribe(
         response => {
           this.historyArray = JSON.parse(response).data;
-         console.log(JSON.parse(response).data)
+    
         },
         errors => {
 
-          console.log(errors)
+          alert('Ошибка, попробуйте позже')
         }
       );
   }
