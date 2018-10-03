@@ -53,10 +53,23 @@
             padding: 0 10px;
             background: #141E30;
             border: 1px solid #141E30;
+            position: relative;
+            min-width: 38px;
+            div{
+                position: absolute;
+                max-width: 100%;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                left: 0;
+                padding: 0 5px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
         }
     }
     th,td{
         height: 60px;
+        white-space: nowrap;
     }
     /*one pixel border forefox hack*/
     tr th:last-child, tr td:last-child {
@@ -85,6 +98,7 @@
        
             padding-right: 60px;
             min-width: 180px;
+            white-space: nowrap;
             .icons-link{
                 opacity: 0;
                 pointer-events: none;
@@ -125,7 +139,7 @@
     tr.is-depr td{
         background-color: beige;
     }
-    tr:hover td{
+    tr:not(.no-hover):hover td{
         background: #C0D5FC;
         .icons-link{
             opacity: 1;
@@ -230,7 +244,7 @@
         }
     }
 }
-.analog-list-table{
+.table-scroll{
     max-width: 100%;
     overflow-y: auto;
 }

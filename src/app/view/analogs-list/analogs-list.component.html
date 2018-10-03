@@ -26,7 +26,7 @@
         </label>
     </div>
 </div>
-<div class="analog-list-table">
+<div class="table-scroll">
     <table 
         class="styled-table"
         [class.scale-font]="!ifShowCoeff"
@@ -34,12 +34,13 @@
         <thead>
             <tr>
                 <ng-container *ngFor="let column of columnsArray">
-                    <ng-container *ngIf="column.active">
-                            <th *ngIf="!column.icon" [innerHtml]="column.name"></th>
-
-                            <th *ngIf="column.icon">
+                    <ng-container *ngIf="column.active && column.name.length">
+                        <th  class="cursor" tooltip="{{column.name}}" placement="top" show-delay="500">
+                            <div  *ngIf="!column.icon" [innerHtml]="column.name"></div>
+                            <ng-container  *ngIf="column.icon">
                                 <img src="/assets/img/icons/{{column.icon}}.svg"/>
-                            </th>
+                            </ng-container>
+                        </th>
                     </ng-container>
                 
                 </ng-container>
@@ -90,14 +91,15 @@
                                 Н/Д
                         </ng-container>
                     </td>
-                    <td  *ngIf="isColumnActive('22')">
-                        {{ analog.floornumber ? analog.floornumber:'Н/Д'}}
+                    <td  *ngIf="isColumnActive('22')" class="text-center">
+                        {{ analog.floornumber!=null ? analog.floornumber:'Н/Д'}}
                     </td>
 
 
                     <td  *ngIf="isColumnActive('4')">
                         {{analog.totalarea}}
                     </td>
+                    
                     <td  *ngIf="isColumnActive('5')">
                         <ng-container *ngIf="currentType=='comparative'">
                             {{analog.price.toFixed(0) | thousandsSpace}}
@@ -106,9 +108,11 @@
                             {{analog['арендная ставка руб. кв.м в год'].toFixed(0) | thousandsSpace}}
                         </ng-container>
                     </td>
+                    <td  *ngIf="currentType=='comparative'">
+                            {{analog['цена за метр'].toFixed(0) | thousandsSpace}}
+                    </td>
                     <td  *ngIf="isColumnActive('6')">
                         <ng-container *ngIf="currentType=='comparative'">
-                            {{analog['цена за метр'].toFixed(0) | thousandsSpace}} /
                             {{analog['скорректированная цена за метр'].toFixed(0) | thousandsSpace}}
                         </ng-container>
                         <ng-container *ngIf="currentType=='profitable' || currentType=='arenda'">
@@ -122,14 +126,13 @@
                     <td  *ngIf="isColumnActive('8')">
                         {{analog.correction.locationKoef.toFixed(2)}}
                     </td>
-                    <td  *ngIf="isColumnActive('9')">
-                        {{analog.correction.metrodistanceKoef.toFixed(2)}}
-                    </td>
-                    <td  *ngIf="isColumnActive('10')">
-                        {{analog.correction.totalareaKoef.toFixed(2)}}
-                    </td>
-                    <td  *ngIf="isColumnActive('11')">
-                        {{analog.correction.floornumberKoef.toFixed(2)}}
+                    <td  *ngIf="isColumnActive('14')">
+                        <ng-container *ngIf="currentType=='comparative'">
+                            {{analog.correction.conditiontypeKoef.toFixed(0)}}
+                        </ng-container>
+                        <ng-container *ngIf="currentType!='comparative'">
+                            {{analog.correction.conditiontypeKoef.toFixed(2)}}
+                        </ng-container>
                     </td>
                     <td  *ngIf="isColumnActive('12')">
                         {{analog.correction.entranceKoef.toFixed(2)}}
@@ -137,14 +140,20 @@
                     <td  *ngIf="isColumnActive('13')">
                         {{analog.correction.houselinetypeKoef.toFixed(2)}}
                     </td>
-                    <td  *ngIf="isColumnActive('14')">
-                        {{analog.correction.conditiontypeKoef.toFixed(2)}}
-                    </td>
                     <td  *ngIf="isColumnActive('15')">
                         {{analog.correction.hasshopwindowsKoef.toFixed(2)}}
                     </td>
                     <td  *ngIf="isColumnActive('16')">
                         {{analog.correction.isbuildinglivingKoef.toFixed(2)}}
+                    </td>
+                    <td  *ngIf="isColumnActive('11')">
+                        {{analog.correction.floornumberKoef.toFixed(2)}}
+                    </td>
+                    <td  *ngIf="isColumnActive('10')">
+                        {{analog.correction.totalareaKoef.toFixed(2)}}
+                    </td>
+                    <td  *ngIf="isColumnActive('9')">
+                        {{analog.correction.metrodistanceKoef.toFixed(2)}}
                     </td>
                     <td *ngIf="isColumnActive('17')">
                         {{analog.finalCorrectionKoef.toFixed(2)}}

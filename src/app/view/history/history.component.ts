@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 /*Services */
 import { SearchService } from '@services';
 @Component({
   selector: 'history',
-  templateUrl: './history.component.html'
+  templateUrl: './history.component.html',
+  styleUrls: ['./history.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class HistoryComponent implements OnInit {
   historyArray;
@@ -21,6 +23,20 @@ export class HistoryComponent implements OnInit {
     profitable:"Доходный",
     arenda:"Аренда"
   }
+  columns = [
+    "ID запроса",
+    "Дата запроса",
+    "Адрес",
+    "Подход",
+    "Тип ремонта",
+    "Вход",
+    "Линия застройки",
+    "Наличие витринных окон",
+    "Тип здания",
+    "Этаж",
+    "Общая площадь",
+    "Количество аналогов"
+  ]
 
   navigateToFoo(arrayParams){
   
@@ -35,7 +51,7 @@ export class HistoryComponent implements OnInit {
       .subscribe(
         response => {
           this.historyArray = JSON.parse(response).data;
-    
+          console.log(this.historyArray)
         },
         errors => {
 

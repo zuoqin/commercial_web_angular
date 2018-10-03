@@ -257,7 +257,6 @@
                         </label>
                     </div>
                 </div>
-                <div *ngIf="currentPlaceObject">Координаты: {{currentPlaceObject.lat}}, {{currentPlaceObject.lon}}</div>
                 <div *ngIf="currentPlaceObject" class="address">
                     <label>Адрес</label>
                     <input type="text" class="styled-input" disabled value="{{currentPlaceObject.address}}"/>
@@ -276,7 +275,10 @@
 <ng-container *ngIf="averagePrice">
 средняя цена {{averagePrice.toFixed(0) | thousandsSpace}}<br>
 </ng-container> -->
-<div class="row" *ngIf="currentObject">
+<div  *ngIf="ifNoOneSelectAnalogs">
+    Не выбран ни один объект
+</div>
+<div class="row" *ngIf="currentObject && !ifNoOneSelectAnalogs">
     <div class="col col-1">
         <div class="card">
             <analogs-list [currentObject]="currentObject" [averagePrice]="averagePrice" [type]="searchForm.controls['approach'].value" (onChangeActiveAnalogs)="onChangeActiveAnalogs($event)"></analogs-list>
@@ -284,7 +286,7 @@
     </div>
 </div>
 
-<div class="row" *ngIf="currentObject && searchForm.controls['approach'].value=='profitable'">
+<div class="row" *ngIf="currentObject && searchForm.controls['approach'].value=='profitable' && !ifNoOneSelectAnalogs">
     <div class="col col-1">
         <div class="card">
             <h2 class="more-margin">Детали расчета</h2>
@@ -292,7 +294,7 @@
                 <div class="detail-list__col">
                     <div class="item">
                         <label>Арендная ставка объекта оценки (в состоянии "стандартный ремонт"), руб./кв.м в год</label>
-                        <div>{{currentObject['арендная ставка объекта оценки (руб. кв.м в год)'].toFixed(2) | thousandsSpace}}</div>
+                        <div>{{currentObject['арендная ставка объекта оценки (руб. кв.м в год)'].toFixed(0) | thousandsSpace}}</div>
                     </div>
                     <div class="item">
                         <label>Площадь, кв.м., объекта оценки</label>
@@ -301,7 +303,7 @@
     
                     <div class="item">
                         <label>Потенциальный валовой доход, руб.</label>
-                        <div>{{currentObject['Потенциальный валовой_доход, руб.'].toFixed(2) | thousandsSpace }}</div>
+                        <div>{{currentObject['Потенциальный валовой_доход, руб.'].toFixed(0) | thousandsSpace }}</div>
                     </div>
                     <div class="item">
                         <label>Потери от недозагрузки, %</label>
@@ -309,25 +311,25 @@
                     </div>
                     <div class="item">
                         <label>Потери от недозагрузки, руб.</label>
-                        <div>{{currentObject['Потери от недозагрузки, руб.'].toFixed(2) | thousandsSpace }}</div>
+                        <div>{{currentObject['Потери от недозагрузки, руб.'].toFixed(0) | thousandsSpace }}</div>
                     </div>
                 </div>
                 <div class="detail-list__col">
                     <div class="item">
                         <label>Действительный валовой доход, руб.</label>
-                        <div>{{currentObject['Действительный валовой доход, руб.'].toFixed(2) | thousandsSpace }}</div>
+                        <div>{{currentObject['Действительный валовой доход, руб.'].toFixed(0) | thousandsSpace }}</div>
                     </div>
                     <div class="item">
                         <label>Операционные расходы, %</label>
-                        <div>{{currentObject['Операционные расходы, %'].toFixed(2) | thousandsSpace }}</div>
+                        <div>{{currentObject['Операционные расходы, %'].toFixed(0) | thousandsSpace }}</div>
                     </div>
                     <div class="item">
                         <label>Операционные расходы, руб.</label>
-                        <div>{{currentObject['Операционные расходы, руб.'].toFixed(2) | thousandsSpace }}</div>
+                        <div>{{currentObject['Операционные расходы, руб.'].toFixed(0) | thousandsSpace }}</div>
                     </div>
                     <div class="item">
                         <label>Чистый операционный доход, руб.</label>
-                        <div>{{currentObject['Чистый операционный доход, руб.'].toFixed(2) | thousandsSpace }}</div>
+                        <div>{{currentObject['Чистый операционный доход, руб.'].toFixed(0) | thousandsSpace }}</div>
                     </div>
                 </div>
                 <div class="detail-list__col">
@@ -337,19 +339,19 @@
                     </div>
                     <div class="item">
                         <label>Стоимость объекта оценки без учета поправки на ремонт, руб.</label>
-                        <div>{{currentObject['Стоимость объекта оценки без учета поправки на ремонт, руб.'].toFixed(2) | thousandsSpace }}</div>
+                        <div>{{currentObject['Стоимость объекта оценки без учета поправки на ремонт, руб.'].toFixed(0) | thousandsSpace }}</div>
                     </div>
                     <div class="item">
                         <label>Поправка на ремонт, руб.</label>
-                        <div>{{currentObject['поправка ремонт, руб.'].toFixed(2) | thousandsSpace }}</div>
+                        <div>{{currentObject['поправка ремонт, руб.'].toFixed(0) | thousandsSpace }}</div>
                     </div>
                     <div class="item">
                         <label>Стоимость объекта оценки доходный подход, руб.</label>
-                        <div>{{currentObject['Стоимость объекта оценки доходный подход, руб.'].toFixed(2) | thousandsSpace }}</div>
+                        <div>{{currentObject['Стоимость объекта оценки доходный подход, руб.'].toFixed(0) | thousandsSpace }}</div>
                     </div>
                     <div class="item">
                         <label>Стоимость объекта оценки, руб./кв.м</label>
-                        <div>{{currentObject['Стоимость объекта оценки за метр, руб.'].toFixed(2) | thousandsSpace }}</div>
+                        <div>{{currentObject['Стоимость объекта оценки за метр, руб.'].toFixed(0) | thousandsSpace }}</div>
                     </div>
                 </div>
                 

@@ -4,40 +4,161 @@
 <div class="row" >
     <div class="col col-1">
         <div class="card">
+            
             <h2>Запросы</h2>
+
+
+
+            <div class="card-stats">
+                    <div class="card">
+                        <div class="card-body ">
+                            <div class="statistics statistics-horizontal">
+                                <div class="info info-horizontal">
+                                    <div class="left">
+                                        <div class="icon icon-primary icon-circle">
+                                            <svg-icon class="icon" src="/assets/img/business.svg"></svg-icon>
+                                        </div>
+                                    </div>
+                                    <div  class="right">
+                                        <h3 class="info-title">72</h3>
+                                        <h6 class="stats-title">Оценок</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="card-footer ">
+                                <div class="stats">
+                                    <svg-icon class="icon" src="/assets/img/calendar.svg"></svg-icon>
+                                     за все время
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body ">
+                            <div class="statistics statistics-horizontal">
+                                <div class="info info-horizontal">
+                                    <div class="left">
+                                        <div class="icon icon-warning icon-circle">
+                                            <svg-icon class="icon" src="/assets/img/business.svg"></svg-icon>
+                                        </div>
+                                    </div>
+                                    <div  class="right">
+                                        <h3 class="info-title">0</h3>
+                                        <h6 class="stats-title">ОЦЕНОК</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="card-footer ">
+                                <div class="stats">
+                                    <svg-icon class="icon" src="/assets/img/calendar.svg"></svg-icon>
+                                    за последнюю неделю
+                            </div>
+                        </div>
+                    </div>
+               
+                    <div class="card">
+                        <div class="card-body ">
+                            <div class="statistics statistics-horizontal">
+                                <div class="info info-horizontal">
+                                    <div class="left">
+                                        <div class="icon icon-primary icon-circle">
+                                            <svg-icon class="icon icon__14" src="/assets/img/money.svg"></svg-icon>
+                                        </div>
+                                    </div>
+                                    <div  class="right">
+                                        <h3 class="info-title">3.3</h3>
+                                        <h6 class="stats-title">МЛН. РУБ.</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="card-footer ">
+                                <div class="stats">
+                                    <svg-icon class="icon" src="/assets/img/calendar.svg"></svg-icon>
+                                    средняя расчетная стоимость
+                            </div>
+                        </div>
+                    </div>
+
+             
+                    <div class="card">
+                        <div class="card-body ">
+                            <div class="statistics statistics-horizontal">
+                                <div class="info info-horizontal">
+                                    <div class="left">
+                                        <div class="icon icon-circle">
+                                            <svg-icon class="icon" src="/assets/img/bell.svg"></svg-icon>
+                                        </div>
+                                    </div>
+                                    <div  class="right">
+                                        <h3 class="info-title">-14.69%</h3>
+                                        <h6 class="stats-title">ОТКЛОНЕНИЕ</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="card-footer ">
+                                <div class="stats">
+                                    <svg-icon class="icon" src="/assets/img/calendar.svg"></svg-icon>
+                                    среднее за все время
+                            </div>
+                        </div>
+                    </div>
+    
+            </div>
+                
+                        
+                  
+    
+                        
+                        
+                 
+              
+
             <div *ngIf="!historyArray">
                 Загрузка..
             </div>
-            <table class="styled-table scale-font" *ngIf="historyArray">
-                <thead>
-                    <tr>
-                        <th>Адрес</th>
-                        <th>Подход</th>
-                        <th>Тип ремонта</th>
-                        <th>Вход</th>
-                        <th>Линия застройки</th>
-                        <th>Наличие витринных окон</th>
-                        <th>Тип здания</th>
-                        <th>Этаж</th>
-                        <th>Общая площадь</th>
-                        <th>Количество аналогов</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let history of historyArray" class="cursor" (click)="navigateToFoo(history)">
-                        <td>{{history.fulladdress.length ? history.fulladdress : history.latitude+', '+history.longitude }}</td>
-                        <td>{{approach[history.approach]}}</td>
-                        <td>{{history.conditiontype}}</td>
-                        <td>{{history.entrance}}</td>
-                        <td>{{history.houselinetype}}</td>
-                        <td>{{history.hasshopwindows ? 'есть':'нет'}}</td>
-                        <td>{{history.isbuildingliving ? 'жилой':'нежилой'}}</td>
-                        <td>{{history.floornumber}}</td>
-                        <td>{{history.totalarea}}</td>
-                        <td>{{history.countofanalogs}}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-scroll">
+                <table class="styled-table scale-font" *ngIf="historyArray"  [mfData]="historyArray" #mf="mfDataTable" [mfRowsOnPage]="10">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let column of columns" class="cursor" tooltip="{{column}}" placement="top" show-delay="500">
+                                
+                                    <div>{{column}}</div>
+                               
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let history of mf.data" class="cursor" (click)="navigateToFoo(history)">
+                            <td>{{history.id}}</td>
+                            <td>{{history.dt | date:'HH:mm'}}<br>{{history.dt | date:"dd.MM.yy"}}</td>
+                            <td>{{history.fulladdress.length ? history.fulladdress : history.latitude+', '+history.longitude }}</td>
+                            <td>{{approach[history.approach]}}</td>
+                            <td>{{history.conditiontype}}</td>
+                            <td>{{history.entrance}}</td>
+                            <td>{{history.houselinetype}}</td>
+                            <td>{{history.hasshopwindows ? 'есть':'нет'}}</td>
+                            <td>{{history.isbuildingliving ? 'жилой':'нежилой'}}</td>
+                            <td>{{history.floornumber}}</td>
+                            <td>{{history.totalarea}}</td>
+                            <td>{{history.countofanalogs}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="no-hover">
+                            <td [colSpan]="columns.length">
+                                <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
     </div>
 </div>

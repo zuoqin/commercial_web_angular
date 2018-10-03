@@ -9,17 +9,21 @@
     </div>
 
     <div class="popup-form__container">
-        <label 
-            *ngFor="let item of columnsCopy"
-            class="popup-form__checkbox styled-checkbox">
-            <input 
-                type="checkbox"
-                (change)="item.active=!item.active"
-                [checked]="item.active" 
-                />
-            <span class="checkmark"></span>
-           <span [innerHtml]="item.name"></span>
-        </label>
+        <ng-container *ngFor="let item of columnsCopy">
+            <label 
+                *ngIf="item.name.length"
+                class="popup-form__checkbox styled-checkbox">
+                <input 
+                    type="checkbox"
+                    (change)="item.active=!item.active"
+                    [checked]="item.active" 
+                    />
+                <span class="checkmark"></span>
+               <span [innerHtml]="item.name"></span>
+            </label>
+
+        </ng-container>
+       
         <label class="popup-form__checkbox styled-checkbox">
             <input 
                 type="checkbox"

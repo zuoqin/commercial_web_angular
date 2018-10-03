@@ -23,30 +23,33 @@ export class AnalogsListComponent implements OnInit {
         let columnName2 = 'Скорректированная арендная ставка предложения, руб./кв.м в год с НДС без КП';
         if(this.currentType=="comparative"){
             columnName1="Цена предложения"
-            columnName2="Цена предложения&nbsp;/<br> скорректированная цена за кв. м.";
+            columnName2="Cкорректированная цена за кв. м.";
+            this.columnsArray.filter(column=>column.id==23)[0].name = "Цена предложения за кв. м.";
 
+        }else{
+            this.columnsArray.filter(column=>column.id==23)[0].name = "";
         }
         this.columnsArray.filter(column=>column.id==5)[0].name = columnName1
         this.columnsArray.filter(column=>column.id==6)[0].name = columnName2
+      
     }
     @Input('currentObject') 
     set object(object) {
      
-        if(!this.currentObject){
-            object.analogs.map(analog=>{
-                analog['active'] = true;
-                // analog['price_per_meter'] = analog.price/analog.totalsquare;
-                // analog['price_per_meter_correction'] = analog.price_correction/analog.totalsquare;
-            })
-        }
+        // if(!this.currentObject){
+        //     object.analogs.map(analog=>{
+        //         analog['active'] = true;
+        //     })
+        // }
     
 
-
+        console.log(object)
         this.currentObject = object;
 
     
     }
     @Output() onChangeActiveAnalogs = new EventEmitter<any>();
+    timerChangeAnalogsCount;
     averagePriceValue;
     currentType;
     currentObject;
@@ -106,6 +109,11 @@ export class AnalogsListComponent implements OnInit {
         {
             name:"",
             active:true,
+            id:23
+        },
+        {
+            name:"",
+            active:true,
             id:6
         },
         {
@@ -121,22 +129,10 @@ export class AnalogsListComponent implements OnInit {
             id:8
         },
         {
-            name:"Расстояние до метро",
-            icon:"subway",
+            name:"Тип ремонта",
+            icon:"repair",
             active:true,
-            id:9
-        },
-        {
-            name:"Общая площадь",
-            icon:"area",
-            active:true,
-            id:10
-        },
-        {
-            name:"Этаж",
-            icon:"stage",
-            active:true,
-            id:11
+            id:14
         },
         {
             name:"Вход",
@@ -151,12 +147,6 @@ export class AnalogsListComponent implements OnInit {
             id:13
         },
         {
-            name:"Тип ремонта",
-            icon:"repair",
-            active:true,
-            id:14
-        },
-        {
             name:"Наличие витрины",
             icon:"facade",
             active:true,
@@ -168,6 +158,31 @@ export class AnalogsListComponent implements OnInit {
             active:true,
             id:16
         },
+        {
+            name:"Этаж",
+            icon:"stage",
+            active:true,
+            id:11
+        },
+        {
+            name:"Общая площадь",
+            icon:"area",
+            active:true,
+            id:10
+        },
+        {
+            name:"Расстояние до метро",
+            icon:"subway",
+            active:true,
+            id:9
+        },
+       
+    
+        
+       
+        
+      
+        
         {
             name:"Финальный коэффициент",
             icon:"finalcoef",
@@ -204,7 +219,6 @@ export class AnalogsListComponent implements OnInit {
         return this.columnsArray.filter(item=>item.id==id)[0].active
     }
     changeActiveAnalog(analog,event){
-        console.log('change')
         analog.active = !analog.active;
         if(this.currentObject.analogs.filter(analog=>analog.active).length==0){
             analog.active = true;
@@ -212,8 +226,13 @@ export class AnalogsListComponent implements OnInit {
             return false;
         }
        
-        console.log()
-        this.onChangeActiveAnalogs.emit(this.currentObject.analogs.filter(analog=>analog.active))
+       if(this.timerChangeAnalogsCount){
+        clearTimeout(this.timerChangeAnalogsCount); 
+       }
+       this.timerChangeAnalogsCount = setTimeout(()=>{
+            this.onChangeActiveAnalogs.emit(this.currentObject.analogs)
+       },1000)
+       
     }
     showImage(url){
         this.gallery.open(url)

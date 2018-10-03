@@ -14,6 +14,7 @@ export class MapComponent implements OnInit {
     mainMarker: google.maps.Marker[] = [];
     public currentMarker;
     markerCluster;
+    activeInfoWindow = null;
     @Output() onInitMap = new EventEmitter<any>();
    
     ngOnInit(){
@@ -169,8 +170,8 @@ export class MapComponent implements OnInit {
                 animation: google.maps.Animation.DROP,
                 
             });
-   
-            const infowindow = new google.maps.InfoWindow({
+          
+            let infowindow = new google.maps.InfoWindow({
                 content: `
                 <div style="margin-top: 5px;">Адрес: ${analog.fulladdress ? analog.fulladdress:'Н/Д'}</div>
                 <div style="margin-top: 5px;">Тип ремонта: ${analog.conditiontype ? analog.conditiontype:'Н/Д'}</div>
@@ -184,7 +185,9 @@ export class MapComponent implements OnInit {
                 `
             });
             marker.addListener('click', () => {
+                if (this.activeInfoWindow) { this.activeInfoWindow.close();}
                 infowindow.open(this.map, marker);
+                this.activeInfoWindow = infowindow;
             });
             marker.setMap(this.map);
             this.markers.push(marker);

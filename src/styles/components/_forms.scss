@@ -301,3 +301,23 @@ fieldset{
         }
     }
 }
+.pagination{
+    list-style-type: none;
+    display: flex;
+    .page-item{
+        display: inline-block;
+        margin: 0 5px;
+        @extend .transition;
+        background: #f1f1f1;
+        padding: 5px 10px;
+        &:not(.disabled):hover,&.active{
+            cursor: pointer;
+            background: #141E30;
+            color: white;
+        }
+    }
+}
+mfpaginator{
+    display: flex;
+    justify-content: space-between
+}

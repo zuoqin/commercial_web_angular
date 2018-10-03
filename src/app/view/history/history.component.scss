@@ -1,0 +1,129 @@
+.card-stats{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    .card{
+        width: 24%;
+        padding: 0;
+
+    }
+}
+
+.card .card-body {
+    padding: 15px 15px 10px;
+}
+
+.card-stats .statistics {
+    position: relative;
+    text-align: center;
+    padding: 15px 0;
+}
+.card-stats .statistics.statistics-horizontal, .card-stats .statistics.statistics-horizontal .info-title {
+    padding: 0;
+}
+.info-horizontal {
+  
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .right{
+        text-align: right;
+        h3{
+            font-size: 30px;
+            line-height: 30px;
+            margin: 0;
+        }
+        h6{
+            font-size: 14px;
+            line-height: 25px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+    }
+}
+
+
+.info-horizontal .icon.icon-circle {
+    width: 65px;
+    height: 65px;
+    max-width: 65px;
+    margin-top: 8px;
+}
+.info .icon.icon-circle {
+    max-width: 70px;
+    width: 70px;
+    height: 70px;
+    margin: 0 auto;
+    border-radius: 50%;
+    box-shadow: 0 9px 30px -6px rgba(44,168,255,.5);
+    font-size: .7142em;
+    background-color: #fff;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg,svg *{
+        width: 22px;
+        height: 22px;
+    }
+    .icon__14{
+        height: 21px;
+        *,svg *{
+        
+            height: 21px;
+        }
+    }
+}
+
+.icon.icon-primary.icon-circle {
+    box-shadow: 0 9px 30px -6px rgba(249,99,50,.5);
+}
+
+.icon.icon-primary {
+    color: #f96332;
+    *{
+        fill:#f96332;
+    }
+}
+.icon.icon-warning.icon-circle {
+    box-shadow: 0 9px 30px -6px rgba(255,178,54,.5);
+}
+.icon.icon-warning {
+    color: #ffb236;
+    *{
+        fill:#ffb236;
+    }
+}
+.info .info-title {
+    margin: 15px 0 5px;
+    padding: 0 15px;
+    color: #2c2c2c;
+    font-weight: 700;
+}
+.card-stats .statistics .stats-title {
+    color: #9a9a9a;
+    font-weight: 400;
+}
+.card-contributions hr, .card-stats hr {
+    margin: 5px 15px;
+}
+hr{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0,0,0,.1);
+}
+.card-footer {
+    padding: .75rem 1.25rem;
+}
+.card .card-footer .stats .icon {
+    svg,*{
+        fill: #2c2c2c;
+        width: 14px !important;
+        height: 14px !important;
+    }
+   
+    margin-right: 5px;
+    position: relative;
+    top: 2px;
+}

@@ -23,6 +23,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { TextMaskModule } from 'angular2-text-mask';
 import { GooglePlaceModule } from "ngx-google-places-autocomplete";
 import { BsModalModule } from 'ng2-bs3-modal';
+import {TooltipModule} from 'ng2-tooltip-directive';
+import {DataTableModule} from "angular-6-datatable";
+
 /*Pipes */
 import { ThousandsSpacePipe } from './pipes/thousands.pipe';
 
@@ -51,7 +54,9 @@ import { ThousandsSpacePipe } from './pipes/thousands.pipe';
     TextMaskModule,
     GooglePlaceModule,
     CoreModule,
-    BsModalModule
+    BsModalModule,
+    TooltipModule,
+    DataTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

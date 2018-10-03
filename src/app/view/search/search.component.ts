@@ -25,7 +25,6 @@ export class SearchComponent implements OnInit {
 
 	isSubmitting:boolean = false;
 	currentObject;
-	currentAnalogsList;
 	filteredAnalogsList;
 	historyParams;
 	btnText = {
@@ -47,6 +46,7 @@ export class SearchComponent implements OnInit {
 	totalPrice2;
 	averagePrice;
 	currentTypeSearch;
+	ifNoOneSelectAnalogs:boolean = false;
 	constructor(
 		private formBuilder: FormBuilder,
 		private searchService:SearchService
@@ -118,6 +118,11 @@ export class SearchComponent implements OnInit {
 			city:"Москва",
 			idArray:null,
 			isDeprArray:null,
+			userId:1,
+			analogIds:null,
+			tocken:null,
+			taskVersionId:null,
+			clientType:'sasfrontend'
 
         })
         this.onChanges();
@@ -164,7 +169,7 @@ export class SearchComponent implements OnInit {
 		}
 		this.isSubmitting = true;
 		this.btnText.text = this.btnText.load;
-		this.currentObject = null;
+	
 
 	
         this.updateSearchFilter(this.searchForm.value);
@@ -176,65 +181,101 @@ export class SearchComponent implements OnInit {
 			this.totalPrice2 = null;
 			this.averagePrice = null;
 		}
-	
-		this.searchService.writeHistory(body)
+		
+
+
+		this.currentObject = null;
+		
+		this.searchService.estimate(this.searchForm.controls['approach'].value,body)
 			.subscribe(
 				response => {
-					console.log(response)
+
+				
+				
+
+						let analogsId = '';
+					
+						response.analogs.map(analog=>{
+							analogsId += analog.id+',';
+						
+						})
+					
+						this.searchForm.controls['analogIds'].setValue(analogsId.slice(0, -1));
+
+						this.updateSearchFilter(this.searchForm.value);
+						let body = this.serialize(this.search);
+
+
+						this.searchService.writeHistory(body)
+							.subscribe(
+								response => {
+									console.log(response)
+								},
+								errors => {
+									console.log(errors)
+								}
+							);
+					
+
+
+					if(this.searchForm.controls['approach'].value=="profitable" || this.searchForm.controls['approach'].value=="comparative"){
+						if(!this.currentTypeSearch){
+					
+							this.currentTypeSearch = this.searchForm.controls['approach'].value;
+							this.calcFirstPrice(response)
+						}else if(this.currentTypeSearch && this.currentTypeSearch== this.searchForm.controls['approach'].value){
+					
+							this.currentTypeSearch = this.searchForm.controls['approach'].value;
+							this.calcFirstPrice(response)
+						}else if(this.currentTypeSearch && this.currentTypeSearch!= this.searchForm.controls['approach'].value){
+							this.calcSecondPrice(response)
+						
+
+						}
+				
+					}else{
+					
+						this.currentTypeSearch = null;
+						this.totalPrice = null;
+						this.totalPrice2 = null;
+						this.averagePrice = null;
+					}
+					
+					
+					
+		
+					
+					
+				
+				
+					this.ifTuchAnotherField = false;
+					this.btnText.text = this.btnText.default;
+					this.isSubmitting = false;
+
+					response.analogs.map(analog=>{
+						analog['active'] = true;
+					})
+
+
+
+					this.currentObject = response;
+					if(response.analogs && response.analogs.length){
+						this.gmap.addAanalogsMarker(response.analogs)
+					}
+
+
+					if(!this.includedepr || !this.includenondepr){
+						this.changeDepr()
+					}  
+
 				},
 				errors => {
+				this.isSubmitting = false;
+				this.btnText.text = this.btnText.default;
+				alert('Ошибка, попробуйте позже')
 					console.log(errors)
 				}
 			);
-			this.searchService.estimate(this.searchForm.controls['approach'].value,body)
-				.subscribe(
-					response => {
-						if(this.searchForm.controls['approach'].value=="profitable" || this.searchForm.controls['approach'].value=="comparative"){
-							if(!this.currentTypeSearch){
-						
-								this.currentTypeSearch = this.searchForm.controls['approach'].value;
-								this.calcFirstPrice(response)
-							}else if(this.currentTypeSearch && this.currentTypeSearch== this.searchForm.controls['approach'].value){
-						
-								this.currentTypeSearch = this.searchForm.controls['approach'].value;
-								this.calcFirstPrice(response)
-							}else if(this.currentTypeSearch && this.currentTypeSearch!= this.searchForm.controls['approach'].value){
-								this.calcSecondPrice(response)
-							
-
-							}
-					
-						}else{
-						
-							this.currentTypeSearch = null;
-							this.totalPrice = null;
-							this.totalPrice2 = null;
-							this.averagePrice = null;
-						}
-						
-						
-						
-			
-						
-						
-					
-					
-						this.ifTuchAnotherField = false;
-						this.btnText.text = this.btnText.default;
-						this.isSubmitting = false;
-						this.currentObject = response;
-						this.currentAnalogsList = response.analogs;
-						if(response.analogs && response.analogs.length){
-							this.gmap.addAanalogsMarker(response.analogs)
-						}
-					},
-					errors => {
-					this.isSubmitting = false;
-					this.btnText.text = this.btnText.default;
-					alert('Ошибка, попробуйте позже')
-						console.log(errors)
-					}
-				);
 
 		
 	}
@@ -267,15 +308,27 @@ export class SearchComponent implements OnInit {
 	}
 	changeDepr(){
 		if(!this.includedepr){
-			this.filteredAnalogsList = this.currentAnalogsList.filter(analog=>analog.isDepr!=1)
+			this.filteredAnalogsList = this.currentObject.analogs.filter(analog=>analog.isDepr!=1)
 		}else{
-			this.filteredAnalogsList =this.currentAnalogsList;
+			this.filteredAnalogsList =this.currentObject.analogs
 		}
 		if(!this.includenondepr){
 			this.filteredAnalogsList = this.filteredAnalogsList.filter(analog=>analog.isDepr!=0)
 		}
+		this.currentObject.analogs.map(analog=>{
+			if(analog.isDepr==1){
+				analog.active = this.includedepr;
+			}
+			if(analog.isDepr==0){
+				analog.active = this.includenondepr;
+			}
+		})
+		this.onChangeActiveAnalogs(this.currentObject.analogs);
+	
 		this.gmap.removeMarker()
-		this.gmap.addAanalogsMarker(this.filteredAnalogsList)
+		this.gmap.addAanalogsMarker(this.filteredAnalogsList);
+
+	
 
 	}
 	selectAnalogsCount(analog){
@@ -294,15 +347,15 @@ export class SearchComponent implements OnInit {
 	}
 	onChangeActiveAnalogs(analogs){
 		this.gmap.removeMarker()
-		this.gmap.addAanalogsMarker(analogs)
-		this.currentAnalogsList = analogs;
+		this.gmap.addAanalogsMarker(analogs);
+		this.currentObject.analogs = analogs
 
 
 
 		let idArray = '';
 		let isDeprArray = '';
 	
-		this.currentAnalogsList.map(analog=>{
+		this.currentObject.analogs.filter(analog=>analog.active).map(analog=>{
 			isDeprArray += analog.isDepr+',';
 			idArray += analog.id+',';
 		
@@ -311,7 +364,13 @@ export class SearchComponent implements OnInit {
 		this.searchForm.controls['idArray'].setValue(idArray.slice(0, -1));
 		this.searchForm.controls['isDeprArray'].setValue(isDeprArray.slice(0, -1));
 		
-
+		if(!idArray && !isDeprArray){
+			this.ifNoOneSelectAnalogs = true;
+			return;
+		}else{
+			this.ifNoOneSelectAnalogs = false;
+			
+		}
 
 		this.updateSearchFilter(this.searchForm.value);
 		let body = this.serialize(this.search);
