@@ -8,13 +8,23 @@ import { SearchService } from '@services';
 import { CONFIG } from '@config';
 import { Search } from '@core';
 
+/*Plugins */
+import { Options } from 'ng5-slider';
 
 @Component({
 	selector: 'search-app',
 	templateUrl: './search.component.html'
 })
 export class SearchComponent implements OnInit {
-	
+	value: number = 0.59;
+	options: Options = {
+		floor: 0.5,
+		ceil: 0.68,
+		step: 0.01,
+		precision: 2
+	};
+	specialCorrection:boolean = false;
+
 	@ViewChild('gmap') gmap: any;
 	numberDecimalSpaceMaskOptions = CONFIG.numberDecimalSpaceMaskOptions;
 	numberSpaceMaskOptions = CONFIG.numberSpaceMaskOptions
@@ -70,31 +80,41 @@ export class SearchComponent implements OnInit {
 		}
 	}
 	initHistory(){
-
 		this.searchForm.controls['fulladdress'].setValue(this.historyParams.fulladdress);
-		
-			this.searchForm.controls['countOfAnalogs'].setValue(this.historyParams.countofanalogs);
 	
-			this.searchForm.controls['approach'].setValue(this.historyParams.approach);
-			this.searchForm.controls['specialitytype'].setValue(this.historyParams.specialitytype);
-			this.searchForm.controls['hasshopwindows'].setValue(this.historyParams.hasshopwindows.toString());
-		
-			this.searchForm.controls['houselinetype'].setValue(this.historyParams.houselinetype);
-			this.searchForm.controls['isbuildingliving'].setValue(this.historyParams.isbuildingliving.toString());
+		this.searchForm.controls['countOfAnalogs'].setValue(this.historyParams.countofanalogs);
 
-			this.searchForm.controls['entrance'].setValue(this.historyParams.entrance);
-			
-			this.searchForm.controls['latitude'].setValue(this.historyParams.latitude);
-			this.searchForm.controls['longitude'].setValue(this.historyParams.longitude);
-			this.searchForm.controls['conditiontype'].setValue(this.historyParams.conditiontype);
-			this.searchForm.controls['floornumber'].setValue(this.historyParams.floornumber);
-			this.searchForm.controls['totalarea'].setValue(this.historyParams.totalarea);
-			this.selectAddress({
-				address: this.historyParams.fulladdress.length ? this.historyParams.fulladdress: `${this.historyParams.latitude}, ${this.historyParams.longitude}`,
-				lat: this.historyParams.latitude,
-				lon: this.historyParams.longitude,
-			})
-			this.submit()
+		this.searchForm.controls['approach'].setValue(this.historyParams.approach);
+		this.searchForm.controls['specialitytype'].setValue(this.historyParams.specialitytype);
+		this.searchForm.controls['hasshopwindows'].setValue(this.historyParams.hasshopwindows.toString());
+	
+		this.searchForm.controls['houselinetype'].setValue(this.historyParams.houselinetype);
+		this.searchForm.controls['isbuildingliving'].setValue(this.historyParams.isbuildingliving.toString());
+
+		this.searchForm.controls['entrance'].setValue(this.historyParams.entrance);
+		
+		this.searchForm.controls['latitude'].setValue(this.historyParams.latitude);
+		this.searchForm.controls['longitude'].setValue(this.historyParams.longitude);
+		this.searchForm.controls['conditiontype'].setValue(this.historyParams.conditiontype);
+		this.searchForm.controls['floornumber'].setValue(this.historyParams.floornumber);
+		this.searchForm.controls['totalarea'].setValue(this.historyParams.totalarea);
+		this.searchForm.controls['isObjectSpecial'].setValue(this.historyParams.isObjectSpecial ? 'yes':'no' );
+		this.searchForm.controls['specialCorrectionKoef'].setValue(this.historyParams.specialCorrectionKoef ? this.historyParams.specialCorrectionKoef: 0.59);
+	
+
+
+		setTimeout(()=>{
+			if(this.historyParams.isObjectSpecial=='yes'){
+				this.specialCorrection = true;
+			}
+		})
+		
+		this.selectAddress({
+			address: this.historyParams.fulladdress.length ? this.historyParams.fulladdress: `${this.historyParams.latitude}, ${this.historyParams.longitude}`,
+			lat: this.historyParams.latitude,
+			lon: this.historyParams.longitude,
+		})
+		this.submit()
 
 		
 	}
@@ -122,10 +142,13 @@ export class SearchComponent implements OnInit {
 			analogIds:null,
 			tocken:null,
 			taskVersionId:null,
-			clientType:'sasfrontend'
+			clientType:'sasfrontend',
+			specialCorrectionKoef:0.59,
+			isObjectSpecial:'no'
 
         })
-        this.onChanges();
+		this.onChanges();
+		
 	}
 
 	onChanges(): void {
@@ -151,7 +174,7 @@ export class SearchComponent implements OnInit {
 		if(this.ifTuchAnotherField){
 			this.currentObject = null;
 		}
-	  }
+	}
 	submit(){
 
 		
@@ -415,6 +438,15 @@ export class SearchComponent implements OnInit {
 
 
 	}
+	changeValueKoef(event){
+		this.searchForm.controls['specialCorrectionKoef'].setValue(event)
+
+	}
+	changeSpecialCorrection(){
+		this.specialCorrection = !this.specialCorrection;
+		this.searchForm.controls['isObjectSpecial'].setValue(this.specialCorrection? 'yes':'no');
+		
+	}
 	addFloor(){
 		this.floorCount.push({
 			data:null
@@ -422,7 +454,13 @@ export class SearchComponent implements OnInit {
 	}
 	removeFloor(i){
 	
-		this.floorCount.splice(i,1)
+		this.floorCount.splice(i,1);
+		setTimeout(()=>{
+		
+			console.log('trigger resize')
+			window.dispatchEvent(new Event('resize'));
+		},1300)
+
 	}
 	serialize(obj) {
         var str = [];

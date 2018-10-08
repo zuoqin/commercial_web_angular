@@ -17,6 +17,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from './core/core.module';
+
 /*Plugins */
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -25,6 +26,7 @@ import { GooglePlaceModule } from "ngx-google-places-autocomplete";
 import { BsModalModule } from 'ng2-bs3-modal';
 import {TooltipModule} from 'ng2-tooltip-directive';
 import {DataTableModule} from "angular-6-datatable";
+import { Ng5SliderModule } from 'ng5-slider';
 
 /*Pipes */
 import { ThousandsSpacePipe } from './pipes/thousands.pipe';
@@ -56,7 +58,8 @@ import { ThousandsSpacePipe } from './pipes/thousands.pipe';
     CoreModule,
     BsModalModule,
     TooltipModule,
-    DataTableModule
+    DataTableModule,
+    Ng5SliderModule
   ],
   providers: [],
   bootstrap: [AppComponent]

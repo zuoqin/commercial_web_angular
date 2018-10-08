@@ -213,7 +213,26 @@
                             </label>
                         </div>
                     </div>
+                    <div class="two-column-row" style="min-height:75px;">
+                        <!-- <label class="left-label label align-top">Линия застройки</label> -->
+                        <div class="control">
+                                <label class="switch">
+                                    <input type="checkbox" (change)="changeSpecialCorrection()" [checked]="specialCorrection">
+                                    <span class="slider round"></span>
+                                    Нетипичный объект
+                                </label>
+                                <ng-container *ngIf="specialCorrection">
+                                    <ng5-slider 
+                                        [(value)]="searchForm.controls['specialCorrectionKoef'].value" 
+                                        (valueChange)="changeValueKoef($event)"
+                                        [options]="options" ></ng5-slider>
 
+                                </ng-container>
+                             
+
+                              
+                        </div>
+                    </div>
                 </div>
                 <div class="styled-form__row">
                     <label class="left-label label">Аналогов</label>
