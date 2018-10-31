@@ -125,7 +125,7 @@ export class SearchComponent implements OnInit {
 			countOfAnalogs: 5,	  //Количество аналогов
 			specialitytype: "псн",   	  //Тип объекта
 			hasshopwindows: 'true', //Наличие витринных окон
-			houselinetype : 'первая',	  //Линия застройки, True первая, False внутриквартальная
+			houselinetype : 'первая главной',	  //Линия застройки, True первая, False внутриквартальная
 			isbuildingliving: 'true',//Тип здания True Жилой False Нежилой
 			entrance : 'общий',      //Тип входа, True отдельный, False общий
 			latitude: [null,   Validators.required],
