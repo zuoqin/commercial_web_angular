@@ -1,9 +1,9 @@
 <gallery-modal #gallery></gallery-modal>
 <div class="analogs-title">
     <ng-container *ngIf="currentType=='comparative'">
-            <h2>Стоимость: {{currentObject['Стоимость объекта оценки сравнительный подход, руб.'].toFixed(0) | thousandsSpace}} р. (с учетом НДС) </h2>
-            <h2 *ngIf="averagePriceValue">Стоимость на основе двух подходов:<span class="nowrpap">{{averagePriceValue.toFixed(0) | thousandsSpace}} р. (с учетом НДС)</span></h2>
-            <h2 class="last"> Стоимость за метр: {{currentObject['Стоимость объекта оценки за метр, руб.'].toFixed(0) | thousandsSpace}} р. (с учетом НДС) </h2>
+                <h2>Стоимость: {{currentObject['Стоимость объекта оценки сравнительный подход, руб.'].toFixed(0) | thousandsSpace}} р. (с учетом НДС) </h2>
+                <h2 *ngIf="averagePriceValue">Стоимость на основе двух подходов:<span class="nowrpap">{{averagePriceValue.toFixed(0) | thousandsSpace}} р. (с учетом НДС)</span></h2>
+                <h2 class="last"> Стоимость за метр: {{currentObject['Стоимость объекта оценки за метр, руб.'].toFixed(0) | thousandsSpace}} р. (с учетом НДС) </h2>
     </ng-container>
     <ng-container *ngIf="currentType=='profitable'">
             <h2>Стоимость: {{currentObject['Стоимость объекта оценки доходный подход, руб.'].toFixed(0) | thousandsSpace}} р. (с учетом НДС)</h2>
@@ -11,9 +11,20 @@
             <h2 class="last"> Стоимость за метр: {{currentObject['Стоимость объекта оценки за метр, руб.'].toFixed(0) | thousandsSpace}} р. (с учетом НДС) </h2>
     </ng-container>
     <ng-container *ngIf="currentType=='arenda'">
-            <h2> Арендная ставка объекта оценки, руб./кв.м в год (с учетом НДС и ЭР без учета КП): {{currentObject['арендная ставка объекта оценки (руб. кв.м в год)'].toFixed(0) | thousandsSpace}} р.</h2>
+            <h2> Арендная ставка объекта оценки, руб./кв.м в год (без учета НДС, ЭР и КП): {{currentObject['арендная ставка объекта оценки (руб. кв.м в год)'].toFixed(0) | thousandsSpace}} р.</h2>
     </ng-container>
 </div>
+<div class="analogs-title">
+    <ng-container *ngIf="currentType=='comparative'">
+                <h2>Кадастровая стоимость: {{currentObject['cadastr_price'].toFixed(0) | thousandsSpace}} р. </h2>
+                <h2 class="last">% отклонения рынка от кадастра: {{currentObject['cadastr_diverge'].toFixed(2) | thousandsSpace}}</h2>
+    </ng-container>
+    <ng-container *ngIf="currentType=='profitable'">
+            <h2>Кадастровая стоимость: {{currentObject['cadastr_price'].toFixed(0) | thousandsSpace}} р. (с учетом НДС)</h2>
+            <h2 class="last">% отклонения рынка от кадастра: {{currentObject['cadastr_diverge'].toFixed(2) | thousandsSpace}}</h2>
+    </ng-container>
+</div>
+
 <div class="table-settings">
 
     <columns-filter (onSelectedColumns)="onSelectedColumns($event)" [columns]="columnsArray"></columns-filter>

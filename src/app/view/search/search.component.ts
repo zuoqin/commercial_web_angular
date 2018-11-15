@@ -282,6 +282,10 @@ export class SearchComponent implements OnInit {
 
 
 					this.currentObject = response;
+                                        if( this.currentObject['cadastr_price'] < 1){
+                                            this.currentObject['cadastr_price'] = this.totalPrice * 0.9;
+                                            this.currentObject['cadastr_diverge'] = 10;
+                                        }
 					if(response.analogs && response.analogs.length){
 						this.gmap.addAanalogsMarker(response.analogs)
 					}
