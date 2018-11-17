@@ -19,8 +19,8 @@ export class AnalogsListComponent implements OnInit {
 
         this.currentType = type;
 
-        let columnName1 = 'Арендная ставка предложения, руб./кв.м в год с НДС без КП';
-        let columnName2 = 'Скорректированная арендная ставка предложения, руб./кв.м в год с НДС без КП';
+        let columnName1 = 'Арендная ставка предложения, руб./кв.м в год без НДС и КП';
+        let columnName2 = 'Скорректированная арендная ставка предложения, руб./кв.м в год без НДС и КП';
         if(this.currentType=="comparative"){
             columnName1="Цена предложения"
             columnName2="Cкорректированная цена за кв. м.";

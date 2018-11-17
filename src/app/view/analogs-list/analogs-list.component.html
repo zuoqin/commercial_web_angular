@@ -16,11 +16,11 @@
 </div>
 <div class="analogs-title">
     <ng-container *ngIf="currentType=='comparative'">
-                <h2>Кадастровая стоимость: {{currentObject['cadastr_price'].toFixed(0) | thousandsSpace}} р. </h2>
-                <h2 class="last">% отклонения рынка от кадастра: {{currentObject['cadastr_diverge'].toFixed(2) | thousandsSpace}}</h2>
+            <h2>Кадастровая стоимость: {{currentObject['cadastr_price'].toFixed(0) | thousandsSpace}} р.</h2>
+            <h2 class="last">% отклонения рынка от кадастра: {{currentObject['cadastr_diverge'].toFixed(2) | thousandsSpace}}</h2>
     </ng-container>
     <ng-container *ngIf="currentType=='profitable'">
-            <h2>Кадастровая стоимость: {{currentObject['cadastr_price'].toFixed(0) | thousandsSpace}} р. (с учетом НДС)</h2>
+            <h2>Кадастровая стоимость: {{currentObject['cadastr_price'].toFixed(0) | thousandsSpace}} р.</h2>
             <h2 class="last">% отклонения рынка от кадастра: {{currentObject['cadastr_diverge'].toFixed(2) | thousandsSpace}}</h2>
     </ng-container>
 </div>
