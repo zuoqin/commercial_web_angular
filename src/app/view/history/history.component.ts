@@ -45,13 +45,27 @@ export class HistoryComponent implements OnInit {
 
   }
 
-
+  getParameterValue(name){
+      name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+      var regexS = "[\\?&]"+name+"=([^&#]*)";
+      var regex = new RegExp( regexS );
+      var results = regex.exec( window.location.href );
+      if( results == null ) return "";
+      else return results[1];
+  }
   ngOnInit(){
     this.searchService.getHistory()
       .subscribe(
         response => {
           this.historyArray = JSON.parse(response).data;
-          console.log(this.historyArray)
+          var id = this.getParameterValue('id');
+          if(id != ''){
+              var res = this.historyArray.filter(x=>x.id == parseInt(id));
+              if(res.length > 0){
+                  this.navigateToFoo(res[0]);
+              }
+              //console.log(this.historyArray);
+          }
         },
         errors => {
 

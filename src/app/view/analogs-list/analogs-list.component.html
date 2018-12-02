@@ -15,15 +15,24 @@
     </ng-container>
 </div>
 <div class="analogs-title">
-    <ng-container *ngIf="currentType=='comparative'">
+    <ng-container *ngIf="currentType=='comparative' && currentObject['cadastr_price']<1">
+            <h2>Кадастровая стоимость не определена</h2>
+    </ng-container>
+    <ng-container *ngIf="currentType=='profitable' && currentObject['cadastr_price']<1">
+            <h2>Кадастровая стоимость не определена</h2>
+    </ng-container>
+</div>
+<div class="analogs-title">
+    <ng-container *ngIf="currentType=='comparative' && currentObject['cadastr_price']>0">
             <h2>Кадастровая стоимость: {{currentObject['cadastr_price'].toFixed(0) | thousandsSpace}} р.</h2>
             <h2 class="last">% отклонения рынка от кадастра: {{currentObject['cadastr_diverge'].toFixed(2) | thousandsSpace}}</h2>
     </ng-container>
-    <ng-container *ngIf="currentType=='profitable'">
+    <ng-container *ngIf="currentType=='profitable'  && currentObject['cadastr_price']>0">
             <h2>Кадастровая стоимость: {{currentObject['cadastr_price'].toFixed(0) | thousandsSpace}} р.</h2>
             <h2 class="last">% отклонения рынка от кадастра: {{currentObject['cadastr_diverge'].toFixed(2) | thousandsSpace}}</h2>
     </ng-container>
 </div>
+
 
 <div class="table-settings">
 

@@ -86,6 +86,7 @@ export class SearchComponent implements OnInit {
 
 		this.searchForm.controls['approach'].setValue(this.historyParams.approach);
 		this.searchForm.controls['specialitytype'].setValue(this.historyParams.specialitytype);
+                this.searchForm.controls['objecttype'].setValue(this.historyParams.objecttype);
 		this.searchForm.controls['hasshopwindows'].setValue(this.historyParams.hasshopwindows.toString());
 	
 		this.searchForm.controls['houselinetype'].setValue(this.historyParams.houselinetype);
@@ -123,7 +124,8 @@ export class SearchComponent implements OnInit {
 			approach: "comparative",    	  //Подход к оценке
 			fulladdress:'',
 			countOfAnalogs: 5,	  //Количество аналогов
-			specialitytype: "псн",   	  //Тип объекта
+			specialitytype: "псн",   	  //Назначение объекта
+                        objecttype: "здание",            //Тип объекта
 			hasshopwindows: 'true', //Наличие витринных окон
 			houselinetype : 'первая главной',	  //Линия застройки, True первая, False внутриквартальная
 			isbuildingliving: 'true',//Тип здания True Жилой False Нежилой
@@ -155,6 +157,7 @@ export class SearchComponent implements OnInit {
 		this.searchForm.get('fulladdress').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
 		this.searchForm.get('countOfAnalogs').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
 		this.searchForm.get('specialitytype').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
+                this.searchForm.get('objecttype').valueChanges.subscribe(() => {this.ifTuchAnotherField = true});
 		this.searchForm.get('hasshopwindows').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
 		this.searchForm.get('isbuildingliving').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
 		this.searchForm.get('entrance').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
@@ -282,10 +285,10 @@ export class SearchComponent implements OnInit {
 
 
 					this.currentObject = response;
-                                        if( this.currentObject['cadastr_price'] < 1){
-                                            this.currentObject['cadastr_price'] = this.totalPrice * 0.9;
-                                            this.currentObject['cadastr_diverge'] = 10;
-                                        }
+                                        //if( this.currentObject['cadastr_price'] < 1){
+                                        //    this.currentObject['cadastr_price'] = this.totalPrice * 0.9;
+                                        //    this.currentObject['cadastr_diverge'] = 10;
+                                        //}
 					if(response.analogs && response.analogs.length){
 						this.gmap.addAanalogsMarker(response.analogs)
 					}

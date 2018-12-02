@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api_url:'https://api.alina.eliz.site'
+  api_url:'http://sas.f-case.ru'
 };
 
 /*

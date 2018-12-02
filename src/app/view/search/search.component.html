@@ -1,4 +1,12 @@
-<h1>НОВЫЙ ЗАПРОС</h1>
+<div class="row">
+    <div style="width:80%">
+        <h1>НОВЫЙ ЗАПРОС</h1>
+    </div>
+    <div style="width:20%;text-align:right">
+        <div class="btn btn--orange" onclick="location.href='/logout';">Выход</div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col col-filter">
         <div class="card">
@@ -14,7 +22,7 @@
                    </div>
                </div>
                <div class="styled-form__row">
-                    <label class="left-label label">Тип объекта</label>
+                    <label class="left-label label">Тип назначения</label>
                     <div class="control">
                         <ng-select 
                             [searchable]="false" 
@@ -24,6 +32,22 @@
                             <ng-option value="псн">ПСН</ng-option>
                         </ng-select>
                   
+                    </div>
+                </div>
+               <div class="styled-form__row">
+                    <label class="left-label label">Тип объекта</label>
+                    <div class="control">
+                        <ng-select
+                            [searchable]="false"
+                            [clearable]="false"
+                            formControlName="objecttype"
+                            >
+                            <ng-option value="objecttype1">здание</ng-option>
+                            <ng-option value="objecttype2">нежилое помещение</ng-option>
+                            <ng-option value="objecttype3">нежилые помещения</ng-option>
+                            <ng-option value="objecttype4">земельный участок</ng-option>
+                        </ng-select>
+
                     </div>
                 </div>
                 <hr>

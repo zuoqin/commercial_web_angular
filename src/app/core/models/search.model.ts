@@ -14,6 +14,7 @@ export interface Search {
     isDeprAnalogsShow:string
     city:string
     specialitytype:string,
+    objecttype:string,
     isFincaseAnalogsShow:string,
     idArray:Array<any>,
     isDeprArray:Array<any>,
