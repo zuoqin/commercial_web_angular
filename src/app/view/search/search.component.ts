@@ -71,6 +71,9 @@ export class SearchComponent implements OnInit {
 		if(this.ifMapInit && this.historyParams && !this.ifInitHistory){
 			this.initHistory()
 		}
+                if(this.searchService.storage != undefined && this.searchService.storage.analogs.length > 0){
+                   this.on_get_response(this.searchService.storage);
+                }
 	}
 	onInitMap(){
 		this.ifMapInit = true;
@@ -178,6 +181,57 @@ export class SearchComponent implements OnInit {
 			this.currentObject = null;
 		}
 	}
+
+        on_get_response(response) : void{
+            let analogsId = '';
+            response.analogs.map(analog=>{
+                analogsId += analog.id+',';
+            })
+           this.searchForm.controls['analogIds'].setValue(analogsId.slice(0, -1));
+           this.updateSearchFilter(this.searchForm.value);
+           let body = this.serialize(this.search);
+           this.searchForm.controls['approach'].setValue(response.approach);
+           if(response.approach=="profitable" || response.approach=="comparative"){
+               if(!this.currentTypeSearch){
+                  this.currentTypeSearch = response.approach;
+                  this.calcFirstPrice(response)
+               }
+               else if(this.currentTypeSearch && this.currentTypeSearch== response.approach){
+                   this.currentTypeSearch = response.approach;
+                   this.calcFirstPrice(response)
+               }else if(this.currentTypeSearch && this.currentTypeSearch!= response.approach){
+                   this.calcSecondPrice(response)
+               }
+            }else{
+               this.currentTypeSearch = null;
+               this.totalPrice = null;
+               this.totalPrice2 = null;
+               this.averagePrice = null;
+            }
+            this.ifTuchAnotherField = false;
+            this.btnText.text = this.btnText.default;
+            this.isSubmitting = false;
+            response.analogs.map(analog=>{
+                                                analog['active'] = true;
+            })
+            this.currentObject = response;
+            if(response.analogs && response.analogs.length){
+                this.gmap.addAanalogsMarker(response.analogs)
+            }
+            if(!this.includedepr || !this.includenondepr){
+               this.changeDepr()
+            }
+            this.ifInitHistory = true;
+            var that = this;
+            setTimeout(function(){
+                that.selectAddress({
+                    address: response.fulladdress,
+                    lat: response.latitude,
+                    lon: response.longitude,
+                });
+            }, 1000);
+        }
+
 	submit(){
 
 		

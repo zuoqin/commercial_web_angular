@@ -39,10 +39,14 @@ export class HistoryComponent implements OnInit {
   ]
 
   navigateToFoo(arrayParams){
-  
-    this.searchService.storage = arrayParams;
-    this._router.navigate(['/search']);
-
+    this.searchService.getHistoryById('request_id=' + arrayParams['id'] + "&usersid=4")
+    .subscribe(
+        response => {
+            for(var k in response) arrayParams[k]=response[k];
+            this.searchService.storage = arrayParams;
+            this._router.navigate(['/search?id=' + arrayParams['id']]);
+        }
+    )
   }
 
   getParameterValue(name){

@@ -53,18 +53,18 @@ export class MapComponent implements OnInit {
     // this.setMarker(this.state.coordinate.latitude, this.state.coordinate.longitude, content);
 
 	setCenter(latitude: number, longitude: number) {
-		const coordinate = new google.maps.LatLng(latitude, longitude);
-		this.map.panTo(coordinate);
-		this.map.setZoom(12)
+	    const coordinate = new google.maps.LatLng(latitude, longitude);
+            if(this.map != undefined){
+                this.map.panTo(coordinate);
+                this.map.setZoom(12);
+            }
     }
 
     removeMarker(){
         while (this.markers.length) {
-			const marker = this.markers.pop();
-			google.maps.event.clearInstanceListeners(marker);
+            const marker = this.markers.pop();
+            google.maps.event.clearInstanceListeners(marker);
             marker.setMap(null);
-           
-           
         }
         if(this.markerCluster){
              this.markerCluster.clearMarkers();
@@ -197,8 +197,10 @@ export class MapComponent implements OnInit {
 
           
             /*add current marker */
-            let currentMarkercoordinate = new google.maps.LatLng(this.currentMarker.lat, this.currentMarker.lon);
-            bounds.extend(currentMarkercoordinate);
+            if(this.currentMarker != null && this.currentMarker != undefined){
+                let currentMarkercoordinate = new google.maps.LatLng(this.currentMarker.lat, this.currentMarker.lon);
+                bounds.extend(currentMarkercoordinate);
+            }
         })
         let mcOptions = {
             gridSize: 15, 
@@ -209,8 +211,10 @@ export class MapComponent implements OnInit {
       
         // var markerCluster = new markerCluster(this.map, this.markers,
         //     {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-        this.map.fitBounds(bounds); 
-        this.map.panToBounds(bounds); 
+        if(this.map != null && this.map != undefined){
+            this.map.fitBounds(bounds);
+            this.map.panToBounds(bounds);
+       }
 		
     }
     

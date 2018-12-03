@@ -40,6 +40,16 @@ export class SearchService {
         return this.apiService.get('/gethistory')
           .pipe(map(data => data));
     }
+
+    getHistoryById(body): Observable<any> {
+        return this.apiService.post('/get_history_by_userid_and_requestid', body, {
+            headers: new HttpHeaders()
+               .set('Content-Type', 'application/x-www-form-urlencoded')
+            })
+          .pipe(map(data => data));
+    }
+
+
     writeHistory(body): Observable<any> {
         return this.apiService.post('/writehistory',body,true)
           .pipe(map(data => data));
