@@ -1,14 +1,27 @@
 <h1>ИСТОРИЯ ЗАПРОСОВ</h1>
 
 
+
+            <div class="row">
+                <div style="width:30%">
+                    <h2>Запросы</h2>
+                </div>
+                <form [formGroup]="searchForm" novalidate >
+                    <div>
+                        <input
+                            type="text"
+                            formControlName="search_data"
+                            class="styled-input w280"
+                            />
+                        <div class="btn btn--orange" (click)="filter_history()">Поиск</div>
+                    </div>
+                 </form>
+            </div>
+
+
 <div class="row" >
     <div class="col col-1">
         <div class="card">
-            
-            <h2>Запросы</h2>
-
-
-
             <div class="card-stats">
                     <div class="card">
                         <div class="card-body ">
@@ -143,6 +156,7 @@
                             <td>{{history.conditiontype}}</td>
                             <td>{{history.entrance}}</td>
                             <td>{{history.houselinetype}}</td>
+                            <td>{{history.isbigstreet == 'yes' ? 'да':'нет'}}</td>
                             <td>{{history.hasshopwindows ? 'есть':'нет'}}</td>
                             <td>{{history.isbuildingliving ? 'жилой':'нежилой'}}</td>
                             <td>{{history.floornumber}}</td>

@@ -81,6 +81,11 @@ export class AnalogsListComponent implements OnInit {
             id:19
         },
         {
+            name:"Крупная улица",
+            active:true,
+            id:39
+        },
+        {
             name:"Наличие витринных окон",
             active:true,
             id:20
@@ -177,12 +182,12 @@ export class AnalogsListComponent implements OnInit {
             id:9
         },
        
-    
-        
-       
-        
-      
-        
+        {
+            name:"На крупной улице",
+            icon:"street",
+            active:true,
+            id:49
+        },
         {
             name:"Финальный коэффициент",
             icon:"finalcoef",

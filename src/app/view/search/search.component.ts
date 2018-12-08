@@ -1,5 +1,6 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router  , ActivatedRoute } from '@angular/router';
 
 
 /*Services */
@@ -35,7 +36,7 @@ export class SearchComponent implements OnInit {
 
 	isSubmitting:boolean = false;
 	currentObject;
-	filteredAnalogsList;
+	//filteredAnalogsList;
 	historyParams;
 	btnText = {
 		default:'Получить стоимость',
@@ -43,7 +44,7 @@ export class SearchComponent implements OnInit {
 		text:'Получить стоимость'
 	}
 
-	includedepr:boolean = true;
+	includedepr:boolean = false;
 	includenondepr:boolean = true;
 	ifMapInit:boolean = false;
 	ifInitHistory:boolean = false;
@@ -59,7 +60,8 @@ export class SearchComponent implements OnInit {
 	ifNoOneSelectAnalogs:boolean = false;
 	constructor(
 		private formBuilder: FormBuilder,
-		private searchService:SearchService
+		private searchService:SearchService,
+                private route: ActivatedRoute
 	){
 	
 		this.historyParams =this.searchService.storage
@@ -67,6 +69,23 @@ export class SearchComponent implements OnInit {
 	}
 	
 	ngOnInit(){
+            if(this.route.snapshot.params['reqid'] != undefined && this.route.snapshot.params['reqid'].length > 0 && (this.searchService.storage == undefined || this.searchService.storage.id != this.route.snapshot.params['reqid']) ){
+     this.searchService.getHistoryById('request_id=' + this.route.snapshot.params['reqid'] + "&userid=2")
+    .subscribe(
+        response => {
+            var arrayParams = {};
+            for(var k in response) arrayParams[k]=response[k];
+            if(arrayParams['isbigstreet'] == null || arrayParams['isbigstreet'] == undefined){
+                arrayParams['isbigstreet'] = 'no'
+            }
+            this.searchService.storage = arrayParams;
+            this.historyParams = this.searchService.storage
+            this.on_get_response(this.searchService.storage);
+        }
+    )
+            }
+            //else
+            //{   
 		this.initForm();
 		if(this.ifMapInit && this.historyParams && !this.ifInitHistory){
 			this.initHistory()
@@ -74,6 +93,7 @@ export class SearchComponent implements OnInit {
                 if(this.searchService.storage != undefined && this.searchService.storage.analogs.length > 0){
                    this.on_get_response(this.searchService.storage);
                 }
+            //}
 	}
 	onInitMap(){
 		this.ifMapInit = true;
@@ -82,54 +102,71 @@ export class SearchComponent implements OnInit {
 			this.initHistory()
 		}
 	}
+        setcontrols_from_history(){
+            this.searchForm.controls['fulladdress'].setValue(this.historyParams.fulladdress);
+            this.searchForm.controls['countOfAnalogs'].setValue(this.historyParams.countofanalogs);
+            this.searchForm.controls['specialitytype'].setValue(this.historyParams.specialitytype);
+            this.searchForm.controls['objecttype'].setValue(this.historyParams.objecttype);
+            if(this.historyParams.hasshopwindows != undefined){
+                this.searchForm.controls['hasshopwindows'].setValue(this.historyParams.hasshopwindows.toString());
+            }
+            if(this.historyParams.isbigstreet != undefined){
+                this.searchForm.controls['isbigstreet'].setValue(this.historyParams.isbigstreet.toString());
+            }
+            this.searchForm.controls['houselinetype'].setValue(this.historyParams.houselinetype);
+            if(this.historyParams.isbuildingliving != undefined){
+                this.searchForm.controls['isbuildingliving'].setValue(this.historyParams.isbuildingliving.toString());
+            }
+
+            this.searchForm.controls['entrance'].setValue(this.historyParams.entrance);
+
+            this.searchForm.controls['latitude'].setValue(this.historyParams.latitude);
+            this.searchForm.controls['longitude'].setValue(this.historyParams.longitude);
+            this.searchForm.controls['conditiontype'].setValue(this.historyParams.conditiontype);
+            this.searchForm.controls['floornumber'].setValue(this.historyParams.floornumber);
+            this.searchForm.controls['totalarea'].setValue(this.historyParams.totalarea);
+            this.searchForm.controls['cadastr_number'].setValue(this.historyParams.cadastr_number);
+            this.searchForm.controls['isObjectSpecial'].setValue(this.historyParams.isObjectSpecial ? 'yes':'no' );
+            this.searchForm.controls['specialCorrectionKoef'].setValue(this.historyParams.specialCorrectionKoef ? this.historyParams.specialCorrectionKoef: 0.59);
+       }
+       check_cadastr_number(){
+           var regex_pattern = /^\d{2}\:\d{2}\:\d{7}:[0-9]+$/;
+           var check = new RegExp(regex_pattern);
+           var num = this.searchForm.get('cadastr_number').value;
+           if(num != null && num != undefined && num.length > 0){
+               var res = check.test(num);
+           }
+           else{
+               var res = true;
+           }
+           return res;
+
+       }        
 	initHistory(){
-		this.searchForm.controls['fulladdress'].setValue(this.historyParams.fulladdress);
-	
-		this.searchForm.controls['countOfAnalogs'].setValue(this.historyParams.countofanalogs);
-
-		this.searchForm.controls['approach'].setValue(this.historyParams.approach);
-		this.searchForm.controls['specialitytype'].setValue(this.historyParams.specialitytype);
-                this.searchForm.controls['objecttype'].setValue(this.historyParams.objecttype);
-		this.searchForm.controls['hasshopwindows'].setValue(this.historyParams.hasshopwindows.toString());
-	
-		this.searchForm.controls['houselinetype'].setValue(this.historyParams.houselinetype);
-		this.searchForm.controls['isbuildingliving'].setValue(this.historyParams.isbuildingliving.toString());
-
-		this.searchForm.controls['entrance'].setValue(this.historyParams.entrance);
+            this.setcontrols_from_history();
+            this.searchForm.controls['approach'].setValue(this.historyParams.approach);
+            setTimeout(()=>{
+                if(this.historyParams.isObjectSpecial=='yes'){
+                    this.specialCorrection = true;
+                }
+            })
 		
-		this.searchForm.controls['latitude'].setValue(this.historyParams.latitude);
-		this.searchForm.controls['longitude'].setValue(this.historyParams.longitude);
-		this.searchForm.controls['conditiontype'].setValue(this.historyParams.conditiontype);
-		this.searchForm.controls['floornumber'].setValue(this.historyParams.floornumber);
-		this.searchForm.controls['totalarea'].setValue(this.historyParams.totalarea);
-		this.searchForm.controls['isObjectSpecial'].setValue(this.historyParams.isObjectSpecial ? 'yes':'no' );
-		this.searchForm.controls['specialCorrectionKoef'].setValue(this.historyParams.specialCorrectionKoef ? this.historyParams.specialCorrectionKoef: 0.59);
-	
-
-
-		setTimeout(()=>{
-			if(this.historyParams.isObjectSpecial=='yes'){
-				this.specialCorrection = true;
-			}
-		})
-		
-		this.selectAddress({
-			address: this.historyParams.fulladdress.length ? this.historyParams.fulladdress: `${this.historyParams.latitude}, ${this.historyParams.longitude}`,
-			lat: this.historyParams.latitude,
-			lon: this.historyParams.longitude,
-		})
-		this.submit()
-
-		
+            this.selectAddress({
+                address: this.historyParams.fulladdress.length ? this.historyParams.fulladdress: `${this.historyParams.latitude}, ${this.historyParams.longitude}`,
+                lat: this.historyParams.latitude,
+                lon: this.historyParams.longitude,
+            })
+            this.submit()
 	}
 	initForm(){
         this.searchForm = this.formBuilder.group({
-			approach: "comparative",    	  //Подход к оценке
+			approach: "comparative",          //Подход к оценке
 			fulladdress:'',
-			countOfAnalogs: 5,	  //Количество аналогов
-			specialitytype: "псн",   	  //Назначение объекта
+			countOfAnalogs: 100,	  //Количество аналогов
+			specialitytype: "псн",           //Назначение объекта
                         objecttype: "здание",            //Тип объекта
-			hasshopwindows: 'true', //Наличие витринных окон
+			hasshopwindows: 'true',          //Наличие витринных окон
+                        isbigstreet: 'yes',
 			houselinetype : 'первая главной',	  //Линия застройки, True первая, False внутриквартальная
 			isbuildingliving: 'true',//Тип здания True Жилой False Нежилой
 			entrance : 'общий',      //Тип входа, True отдельный, False общий
@@ -138,6 +175,7 @@ export class SearchComponent implements OnInit {
 			conditiontype: "стандарт",     //Состояние ремонта
 			floornumber: [1, Validators.required],              //Этаж расположения объекта
 			totalarea: [40.7, Validators.required],   //Общая площадь объекта
+                        cadastr_number: '',
 			isDeprAnalogsShow:"yes",
 			isFincaseAnalogsShow: 'yes',
 			city:"Москва",
@@ -157,29 +195,26 @@ export class SearchComponent implements OnInit {
 	}
 
 	onChanges(): void {
-		this.searchForm.get('fulladdress').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
-		this.searchForm.get('countOfAnalogs').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
-		this.searchForm.get('specialitytype').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
-                this.searchForm.get('objecttype').valueChanges.subscribe(() => {this.ifTuchAnotherField = true});
-		this.searchForm.get('hasshopwindows').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
-		this.searchForm.get('isbuildingliving').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
-		this.searchForm.get('entrance').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
-		this.searchForm.get('latitude').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
-		this.searchForm.get('longitude').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
-		this.searchForm.get('conditiontype').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
-		this.searchForm.get('floornumber').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
-		this.searchForm.get('totalarea').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
-
-
-
-		this.searchForm.get('approach').valueChanges.subscribe(() => {this.currentObject = null;}); 
-		// this.searchForm.valueChanges.subscribe(val => {
-		
-		
+            this.searchForm.get('fulladdress').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
+            this.searchForm.get('countOfAnalogs').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
+            this.searchForm.get('specialitytype').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
+            this.searchForm.get('objecttype').valueChanges.subscribe(() => {this.ifTuchAnotherField = true});
+            this.searchForm.get('hasshopwindows').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
+            this.searchForm.get('isbigstreet').valueChanges.subscribe(() => {this.ifTuchAnotherField = true});
+            this.searchForm.get('isbuildingliving').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
+            this.searchForm.get('entrance').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
+            this.searchForm.get('latitude').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
+            this.searchForm.get('longitude').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
+            this.searchForm.get('conditiontype').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
+            this.searchForm.get('floornumber').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
+            this.searchForm.get('totalarea').valueChanges.subscribe(() => {this.ifTuchAnotherField = true}); 
+            this.searchForm.get('cadastr_number').valueChanges.subscribe(() => {this.ifTuchAnotherField = true});
+            this.searchForm.get('approach').valueChanges.subscribe(() => {this.currentObject = null;}); 
+            // this.searchForm.valueChanges.subscribe(val => {	
 		// });
-		if(this.ifTuchAnotherField){
-			this.currentObject = null;
-		}
+            if(this.ifTuchAnotherField){
+                this.currentObject = null;
+            }
 	}
 
         on_get_response(response) : void{
@@ -224,6 +259,7 @@ export class SearchComponent implements OnInit {
             this.ifInitHistory = true;
             var that = this;
             setTimeout(function(){
+                that.setcontrols_from_history();
                 that.selectAddress({
                     address: response.fulladdress,
                     lat: response.latitude,
@@ -392,28 +428,30 @@ export class SearchComponent implements OnInit {
 	}
 	changeDepr(){
 		if(!this.includedepr){
-			this.filteredAnalogsList = this.currentObject.analogs.filter(analog=>analog.isDepr!=1)
+			this.currentObject['filteredAnalogsList'] = this.currentObject.analogs.filter(analog=>analog.isDepr!=1)
 		}else{
-			this.filteredAnalogsList =this.currentObject.analogs
+			this.currentObject['filteredAnalogsList'] = this.currentObject.analogs
 		}
+
 		if(!this.includenondepr){
-			this.filteredAnalogsList = this.filteredAnalogsList.filter(analog=>analog.isDepr!=0)
+			this.currentObject.filteredAnalogsList = this.currentObject.filteredAnalogsList.filter(analog=>analog.isDepr!=0)
 		}
-		this.currentObject.analogs.map(analog=>{
-			if(analog.isDepr==1){
-				analog.active = this.includedepr;
+		var filtred_analogs = this.currentObject.analogs.filter(analog=>{
+			if(analog.isDepr==1 && this.includedepr == true){
+                            return true;
 			}
-			if(analog.isDepr==0){
-				analog.active = this.includenondepr;
+			if(analog.isDepr==0 && this.includenondepr == true){
+                            return true;
 			}
+                        return false;
 		})
-		this.onChangeActiveAnalogs(this.currentObject.analogs);
-	
-		this.gmap.removeMarker()
-		this.gmap.addAanalogsMarker(this.filteredAnalogsList);
 
-	
-
+            var that = this;
+            setTimeout(function(){
+                that.onChangeActiveAnalogs(filtred_analogs);
+                that.gmap.removeMarker()
+                that.gmap.addAanalogsMarker(that.currentObject.filteredAnalogsList);
+            }, 100);
 	}
 	selectAnalogsCount(analog){
 		this.searchForm.controls['countOfAnalogs'].setValue(analog);
@@ -432,9 +470,7 @@ export class SearchComponent implements OnInit {
 	onChangeActiveAnalogs(analogs){
 		this.gmap.removeMarker()
 		this.gmap.addAanalogsMarker(analogs);
-		this.currentObject.analogs = analogs
-
-
+		//this.currentObject.analogs = analogs
 
 		let idArray = '';
 		let isDeprArray = '';

@@ -89,7 +89,21 @@
                         </div>
                     </div>
                 </div>
-               
+                <div class="styled-form__row">
+                    <label class="left-label label">Кадастровый номер объекта</label>
+                    <div class="control">
+                        <div>
+                        <input
+                            type="text"
+                            formControlName="cadastr_number"
+                            class="styled-input w280"
+                            />
+                            <label
+                                *ngIf="!check_cadastr_number()"
+                                class="error-field">Введите кадастровый номер</label>
+                        </div>
+                    </div>
+                </div>
                 <div class="styled-form__row">
                     <label class="left-label label">Этаж</label>
                     <div class="control">
@@ -112,10 +126,10 @@
                         <label class="left-label label align-top">Подход к оценке</label>
                         <div class="control">
                             <label class="styled-radio">
-                                <input 
+                                <input
                                     type="radio"
-                                    formControlName="approach" 
-                                    name="approach" 
+                                    formControlName="approach"
+                                    name="approach"
                                     value="comparative"
                                     >
                                 Сравнительный
@@ -246,6 +260,31 @@
                             </label>
                         </div>
                     </div>
+                    <div class="two-column-row">
+                        <label class="left-label label align-top">Крупная улица</label>
+                        <div class="control">
+                            <label class="styled-radio" >
+                                <input
+                                    type="radio"
+                                    formControlName="isbigstreet"
+                                    name="isbigstreet"
+                                    value="yes">
+                                Да
+                                <span class="radiobtn"></span>
+                            </label>
+                            <label class="styled-radio">
+                                <input
+                                    type="radio"
+                                    formControlName="isbigstreet"
+                                    name="isbigstreet"
+                                    value="no">
+                                Нет
+                                <span class="radiobtn"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="styled-form__row" style="padding-left:15px;">
                     <div class="two-column-row" style="min-height:75px;">
                         <!-- <label class="left-label label align-top">Линия застройки</label> -->
                         <div class="control">
@@ -259,11 +298,7 @@
                                         [(value)]="searchForm.controls['specialCorrectionKoef'].value" 
                                         (valueChange)="changeValueKoef($event)"
                                         [options]="options" ></ng5-slider>
-
                                 </ng-container>
-                             
-
-                              
                         </div>
                     </div>
                 </div>

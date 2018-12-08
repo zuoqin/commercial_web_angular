@@ -13,14 +13,23 @@ const routes: Routes = [
 		component:SearchComponent
 	},
 	{
-		path: 'history', 
-		component:HistoryComponent
-	},
-	{ path: '**',  redirectTo: 'search' }
+		path: 'history',
+                children: [
+                   {
+                       path: ':reqid',
+                       component:SearchComponent
+                   },
+                   {
+                       path: '',
+                       component:HistoryComponent
+                   }
+                ]
+	}
+	//{ path: '**',  redirectTo: 'search' }
 ];
 
 @NgModule({
-	imports: [RouterModule.forRoot(routes)],
+	imports: [RouterModule.forRoot(routes,{useHash: true})],
 	exports: [
 		RouterModule
 	],

@@ -25,11 +25,11 @@
 <div class="analogs-title">
     <ng-container *ngIf="currentType=='comparative' && currentObject['cadastr_price']>0">
             <h2>Кадастровая стоимость: {{currentObject['cadastr_price'].toFixed(0) | thousandsSpace}} р.</h2>
-            <h2 class="last">% отклонения рынка от кадастра: {{currentObject['cadastr_diverge'].toFixed(2) | thousandsSpace}}</h2>
+            <h2 class="last">% отклонения рынка от кадастра: {{(100.0*currentObject['cadastr_diverge']).toFixed(2) | thousandsSpace}}</h2>
     </ng-container>
     <ng-container *ngIf="currentType=='profitable'  && currentObject['cadastr_price']>0">
             <h2>Кадастровая стоимость: {{currentObject['cadastr_price'].toFixed(0) | thousandsSpace}} р.</h2>
-            <h2 class="last">% отклонения рынка от кадастра: {{currentObject['cadastr_diverge'].toFixed(2) | thousandsSpace}}</h2>
+            <h2 class="last">% отклонения рынка от кадастра: {{(100.0*currentObject['cadastr_diverge']).toFixed(2) | thousandsSpace}}</h2>
     </ng-container>
 </div>
 
@@ -68,7 +68,7 @@
         </thead>
         <tbody>
 
-                <tr [class.is-depr]="analog.isDepr" *ngFor="let analog of currentObject.analogs">
+                <tr [class.is-depr]="analog.isDepr" *ngFor="let analog of currentObject.filteredAnalogsList">
                     <td *ngIf="isColumnActive('1')" class="text-center align-middle" width="95">
                         <label class="styled-checkbox styled-checkbox--without-label">
                             <input type="checkbox" [checked]="analog.active" (change)="changeActiveAnalog(analog,$event)"/>
@@ -94,6 +94,9 @@
                     </td>
                     <td  *ngIf="isColumnActive('19')">
                         {{ analog.houselinetype ? analog.houselinetype:'Н/Д'}}
+                    </td>
+                    <td  *ngIf="isColumnActive('39')">
+                        {{ analog.isbigstreet == 'yes' ? 'да' : 'нет'}}
                     </td>
                     <td  *ngIf="isColumnActive('20')">
                         <ng-container *ngIf="analog.hasshopwindows">
@@ -175,6 +178,9 @@
                     <td  *ngIf="isColumnActive('9')">
                         {{analog.correction.metrodistanceKoef.toFixed(2)}}
                     </td>
+                    <td  *ngIf="isColumnActive('49')">
+                        {{analog.correction.isbigstreetKoef.toFixed(2)}}
+                    </td>
                     <td *ngIf="isColumnActive('17')">
                         {{analog.finalCorrectionKoef.toFixed(2)}}
                     </td>
@@ -190,7 +196,9 @@
             {{column.name}}
         </div>
     </ng-container>
-    <div class="item item--title">
+    <!--
+        <div class="item item--title">
             *Корректирующие коэффициенты
-    </div>
+        </div>
+    -->
 </div>
