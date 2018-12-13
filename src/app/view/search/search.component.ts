@@ -253,9 +253,6 @@ export class SearchComponent implements OnInit {
             if(response.analogs && response.analogs.length){
                 this.gmap.addAanalogsMarker(response.analogs)
             }
-            if(!this.includedepr || !this.includenondepr){
-               this.changeDepr()
-            }
             this.ifInitHistory = true;
             var that = this;
             setTimeout(function(){
@@ -265,7 +262,12 @@ export class SearchComponent implements OnInit {
                     lat: response.latitude,
                     lon: response.longitude,
                 });
-            }, 1000);
+            }, 100);
+            setTimeout(function(){
+                if(!that.includedepr || !that.includenondepr){
+                    that.changeDepr()
+                }
+            }, 200);
         }
 
 	submit(){
@@ -475,7 +477,7 @@ export class SearchComponent implements OnInit {
 		let idArray = '';
 		let isDeprArray = '';
 	
-		this.currentObject.analogs.filter(analog=>analog.active).map(analog=>{
+		this.currentObject.filteredAnalogsList.filter(analog=>analog.active).map(analog=>{
 			isDeprArray += analog.isDepr+',';
 			idArray += analog.id+',';
 		
